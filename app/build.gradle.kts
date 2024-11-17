@@ -14,11 +14,11 @@ room {
 */
 
 android {
-    namespace = "com.gondroid.todoapp"
+    namespace = "com.gondroid.randomchallengeapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gondroid.todoapp"
+        applicationId = "com.gondroid.randomchallengeapp"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

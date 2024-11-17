@@ -1,4 +1,4 @@
-package com.gondroid.todoapp.navigation
+package com.gondroid.randomchallengeapp.navigation
 
 import androidx.compose.runtime.Composable
 
