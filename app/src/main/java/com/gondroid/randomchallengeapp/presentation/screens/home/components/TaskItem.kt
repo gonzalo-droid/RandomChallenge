@@ -1,4 +1,4 @@
-package com.gondroid.randomchallengeapp.presentation.screens.home
+package com.gondroid.randomchallengeapp.presentation.screens.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gondroid.randomchallengeapp.domain.Category
 import com.gondroid.randomchallengeapp.domain.Task
-import com.gondroid.randomchallengeapp.ui.theme.RandomChallengeAppTheme
 
 @Composable
 @Preview(showBackground = true)

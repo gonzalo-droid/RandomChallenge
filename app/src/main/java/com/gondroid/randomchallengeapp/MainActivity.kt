@@ -4,21 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.gondroid.randomchallengeapp.data.FakeTaskLocalDataSource
-import com.gondroid.randomchallengeapp.domain.Task
+import com.gondroid.randomchallengeapp.presentation.screens.home.HomeDataState
+import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreen
+import com.gondroid.randomchallengeapp.presentation.screens.home.providers.HomeScreenPreviewProvider
 import com.gondroid.randomchallengeapp.ui.theme.RandomChallengeAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,30 +20,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             RandomChallengeAppTheme {
 
-                var text by remember { mutableStateOf("") }
-                val fakeList = FakeTaskLocalDataSource
-                LaunchedEffect(true) {
-                    fakeList.tasksFlow.collect {
-                        text = it.toString()
-                    }
-                }
-
-                LaunchedEffect(true) {
-                    fakeList.addTask(
-                        Task(
-                            id = "1",
-                            title = "Task 1",
-                            description = "Description 1"
-                        )
-                    )
-                }
-
-
+                val previewProvider = HomeScreenPreviewProvider()
+                val state = HomeDataState(
+                    date = previewProvider.values.first().date,
+                    summary = previewProvider.values.first().summary,
+                    completedTask = previewProvider.values.first().completedTask,
+                    pendingTask = previewProvider.values.first().pendingTask
+                )
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text(
-                        text = text,
-                        modifier = Modifier.padding(innerPadding)
-                            .fillMaxSize()
+                    HomeScreen(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                        state = state
                     )
                 }
             }
@@ -59,9 +40,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun HelloWorld(
-    modifier: Modifier = Modifier
-) {
-
-}

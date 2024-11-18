@@ -2,16 +2,19 @@ package com.gondroid.randomchallengeapp.data
 
 import com.gondroid.randomchallengeapp.domain.Task
 import com.gondroid.randomchallengeapp.domain.TaskLocalDataSource
+import com.gondroid.randomchallengeapp.presentation.screens.home.providers.completedTask
+import com.gondroid.randomchallengeapp.presentation.screens.home.providers.pendingTask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-object FakeTaskLocalDataSource: TaskLocalDataSource {
+object FakeTaskLocalDataSource : TaskLocalDataSource {
     private val _tasksFlow = MutableStateFlow<List<Task>>(emptyList())
 
     init {
-       // _tasksFlow.value = completedTask + pendingTask
+        _tasksFlow.value = completedTask + pendingTask
     }
+
     override val tasksFlow: Flow<List<Task>>
         get() = _tasksFlow
 
