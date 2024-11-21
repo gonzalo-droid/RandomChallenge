@@ -2,6 +2,7 @@
 
 package com.gondroid.randomchallengeapp.presentation.screens.home
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,17 +26,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gondroid.randomchallengeapp.R
 import com.gondroid.randomchallengeapp.presentation.screens.home.components.SectionTitle
 import com.gondroid.randomchallengeapp.presentation.screens.home.components.SummaryInfo
@@ -43,14 +47,70 @@ import com.gondroid.randomchallengeapp.presentation.screens.home.components.Task
 import com.gondroid.randomchallengeapp.presentation.screens.home.providers.HomeScreenPreviewProvider
 import com.gondroid.randomchallengeapp.ui.theme.RandomChallengeAppTheme
 
+@Composable
+fun HomeScreenRoot() {
+    val viewModel: HomeScreenViewModel = viewModel<HomeScreenViewModel>()
+    val state = viewModel.state
+    val event = viewModel.events
+    val context = LocalContext.current
+
+    LaunchedEffect(
+        true
+    ) {
+        event.collect { event ->
+            when (event) {
+                HomeScreenEvent.DeletedTask -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.task_deleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                HomeScreenEvent.AllTaskDeleted -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.all_task_deleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                HomeScreenEvent.UpdatedTask -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.task_updated),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    HomeScreen(
+        state = state,
+        onAction = { action ->
+            when (action) {
+                is HomeScreenAction.OnAddTask -> {
+                    // navigateToTaskScreen(null)
+                }
+
+                is HomeScreenAction.OnClickTask -> {
+                    // navigateToTaskScreen(action.taskId)
+                }
+
+                else -> viewModel.onAction(action)
+            }
+        }
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: HomeDataState
+    state: HomeDataState,
+    onAction: (HomeScreenAction) -> Unit
 ) {
     var isMenuExtended by remember { mutableStateOf(false) }
-
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -91,6 +151,7 @@ fun HomeScreen(
                                     )
                                 },
                                 onClick = {
+                                    onAction(HomeScreenAction.OnDeleteAllTasks)
                                     isMenuExtended = false
                                 }
                             )
@@ -102,7 +163,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    // onAction(HomeScreenAction.OnClickAddTask)
+                    onAction(HomeScreenAction.OnAddTask)
                 },
                 content = {
                     Icon(
@@ -153,10 +214,19 @@ fun HomeScreen(
                         .animateItem(),
                     task = task,
                     onItemSelected = { action, id ->
-                        // onAction(HomeScreenAction.OnClickTask(task.id))
+                        when (action) {
+                            ActionOnSelected.DELETE -> {
+                                onAction(HomeScreenAction.OnDeleteTask(task))
+                            }
+
+                            else -> {
+                                // TODO go to detail
+                                // onAction(HomeScreenAction.OnClickTask(task.id))
+                            }
+                        }
                     },
                     onToggleCompletion = {
-                        // onAction(HomeScreenAction.OnToggleTask(it))
+                        onAction(HomeScreenAction.OnToggleTask(task))
                     }
                 )
             }
@@ -185,10 +255,19 @@ fun HomeScreen(
                         .animateItem(),
                     task = task,
                     onItemSelected = { action, id ->
-                        // onAction(HomeScreenAction.OnClickTask(task.id))
+                        when (action) {
+                            ActionOnSelected.DELETE -> {
+                                onAction(HomeScreenAction.OnDeleteTask(task))
+                            }
+
+                            else -> {
+                                // TODO go to detail
+                                // onAction(HomeScreenAction.OnClickTask(task.id))
+                            }
+                        }
                     },
                     onToggleCompletion = {
-                        // onAction(HomeScreenAction.OnToggleTask(it))
+                        onAction(HomeScreenAction.OnToggleTask(task))
                     }
                 )
             }
@@ -204,6 +283,9 @@ fun HomeScreenPreviewLight(
     RandomChallengeAppTheme {
         HomeScreen(
             state = state,
+            onAction = {
+
+            }
         )
     }
 }
@@ -219,6 +301,9 @@ fun HomeScreenPreviewDark(
     RandomChallengeAppTheme {
         HomeScreen(
             state = state,
+            onAction = {
+
+            }
         )
     }
 }

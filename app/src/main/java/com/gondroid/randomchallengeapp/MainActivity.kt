@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeDataState
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreen
+import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreenRoot
 import com.gondroid.randomchallengeapp.presentation.screens.home.providers.HomeScreenPreviewProvider
 import com.gondroid.randomchallengeapp.ui.theme.RandomChallengeAppTheme
 
@@ -28,12 +29,7 @@ class MainActivity : ComponentActivity() {
                     pendingTask = previewProvider.values.first().pendingTask
                 )
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
-                        state = state
-                    )
+                    HomeScreenRoot()
                 }
             }
         }

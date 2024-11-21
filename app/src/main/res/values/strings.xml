@@ -1,7 +1,10 @@
 <resources>
   <string name="app_name">Todo App</string>
     <string name="delete_all">Delete all</string>
-    <string name="summary">Resumen\n</string>
-    <string name="pending_tasks">Tareas pendientes</string>
-    <string name="completed_tasks">Tareas completadas</string>
+    <string name="summary">You have %s pending tasks</string>
+    <string name="pending_tasks">Pending</string>
+    <string name="completed_tasks">Completed</string>
+  <string name="task_deleted">Delete task</string>
+  <string name="task_updated">Done task</string>
+  <string name="all_task_deleted">Delete all tasks</string>
 </resources>
