@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gondroid.randomchallengeapp.R
 import com.gondroid.randomchallengeapp.presentation.screens.home.components.SectionTitle
 import com.gondroid.randomchallengeapp.presentation.screens.home.components.SummaryInfo
@@ -220,8 +219,7 @@ fun HomeScreen(
                             }
 
                             else -> {
-                                // TODO go to detail
-                                // onAction(HomeScreenAction.OnClickTask(task.id))
+                                onAction(HomeScreenAction.OnClickTask(task.id))
                             }
                         }
                     },
@@ -261,8 +259,7 @@ fun HomeScreen(
                             }
 
                             else -> {
-                                // TODO go to detail
-                                // onAction(HomeScreenAction.OnClickTask(task.id))
+                                onAction(HomeScreenAction.OnClickTask(task.id))
                             }
                         }
                     },

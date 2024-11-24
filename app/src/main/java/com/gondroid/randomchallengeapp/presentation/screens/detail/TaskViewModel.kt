@@ -28,7 +28,6 @@ class TaskViewModel @Inject constructor(
     private val localDataSource: TaskLocalDataSource
 ): ViewModel() {
 
-
     var state by mutableStateOf(TaskScreenState())
         private set
 
@@ -58,8 +57,6 @@ class TaskViewModel @Inject constructor(
         canSaveTask.onEach {
             state = state.copy(canSaveTask = it.isNotEmpty())
         }.launchIn(viewModelScope)
-
-
     }
 
     fun onAction(action: ActionTask) {
