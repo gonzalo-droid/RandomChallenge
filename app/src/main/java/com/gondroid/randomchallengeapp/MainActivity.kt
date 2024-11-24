@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import com.gondroid.randomchallengeapp.navigation.NavigationRoot
+import com.gondroid.randomchallengeapp.presentation.screens.detail.TaskScreenRoot
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeDataState
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreen
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreenRoot
@@ -21,6 +24,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             RandomChallengeAppTheme {
 
+                val navController = rememberNavController()
+                NavigationRoot(navController)
+                /*
                 val previewProvider = HomeScreenPreviewProvider()
                 val state = HomeDataState(
                     date = previewProvider.values.first().date,
@@ -31,6 +37,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HomeScreenRoot()
                 }
+                 */
+
             }
         }
     }

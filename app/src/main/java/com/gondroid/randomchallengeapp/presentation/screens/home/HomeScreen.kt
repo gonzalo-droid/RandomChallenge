@@ -48,8 +48,10 @@ import com.gondroid.randomchallengeapp.presentation.screens.home.providers.HomeS
 import com.gondroid.randomchallengeapp.ui.theme.RandomChallengeAppTheme
 
 @Composable
-fun HomeScreenRoot() {
-    val viewModel: HomeScreenViewModel = viewModel<HomeScreenViewModel>()
+fun HomeScreenRoot(
+    navigateToTaskScreen: (String?) -> Unit,
+    viewModel:HomeScreenViewModel
+) {
     val state = viewModel.state
     val event = viewModel.events
     val context = LocalContext.current
@@ -88,15 +90,13 @@ fun HomeScreenRoot() {
     HomeScreen(
         state = state,
         onAction = { action ->
-            when (action) {
-                is HomeScreenAction.OnAddTask -> {
-                    // navigateToTaskScreen(null)
+            when(action){
+                is HomeScreenAction.OnAddTask->{
+                    navigateToTaskScreen(null)
                 }
-
-                is HomeScreenAction.OnClickTask -> {
-                    // navigateToTaskScreen(action.taskId)
+                is HomeScreenAction.OnClickTask->{
+                    navigateToTaskScreen(action.taskId)
                 }
-
                 else -> viewModel.onAction(action)
             }
         }
