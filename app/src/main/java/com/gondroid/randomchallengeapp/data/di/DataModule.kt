@@ -1,9 +1,15 @@
 package com.gondroid.randomchallengeapp.data.di
 
+import android.content.Context
+import androidx.room.Room
+import com.gondroid.randomchallengeapp.data.RandomChallengeDatabase
+import com.gondroid.randomchallengeapp.data.RoomTaskLocalDataSource
+import com.gondroid.randomchallengeapp.data.TaskDao
 import com.gondroid.randomchallengeapp.domain.TaskLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
@@ -13,16 +19,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
-    /*
+
     @Provides
     @Singleton
     fun provideDataBase(
         @ApplicationContext
-        context:Context
-    ): TodoDatabase {
+        context: Context
+    ): RandomChallengeDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            TodoDatabase::class.java,
+            RandomChallengeDatabase::class.java,
             "task_database"
         ).build()
     }
@@ -30,7 +36,7 @@ class DataModule {
     @Provides
     @Singleton
     fun provideTaskDao(
-        database: TodoDatabase
+        database: RandomChallengeDatabase
     ): TaskDao {
         return database.taskDao()
     }
@@ -46,5 +52,4 @@ class DataModule {
         return RoomTaskLocalDataSource(taskDao, dispatcherIO)
     }
 
-     */
 }

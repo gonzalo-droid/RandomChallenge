@@ -51,9 +51,4 @@ object FakeTaskLocalDataSource : TaskLocalDataSource {
         delay(1000L)
         return _tasksFlow.value.find { it.id == taskId }
     }
-
-    override suspend fun removeAllTasks() {
-        delay(1000L)
-        _tasksFlow.value = emptyList()
-    }
 }

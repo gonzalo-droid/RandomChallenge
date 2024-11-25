@@ -81,7 +81,7 @@ class HomeScreenViewModel @Inject constructor(
                 }
 
                 OnDeleteAllTasks -> {
-                    taskLocalDataSource.removeAllTasks()
+                    taskLocalDataSource.deleteAllTasks()
                     eventChannel.send(HomeScreenEvent.AllTaskDeleted)
                 }
 

@@ -9,5 +9,4 @@ interface TaskLocalDataSource {
     suspend fun removeTask(task: Task)
     suspend fun deleteAllTasks()
     suspend fun getTaskById(taskId: String): Task?
-    suspend fun removeAllTasks()
 }
