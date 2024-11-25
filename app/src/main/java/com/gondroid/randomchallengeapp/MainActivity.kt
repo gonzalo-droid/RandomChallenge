@@ -16,7 +16,9 @@ import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreen
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreenRoot
 import com.gondroid.randomchallengeapp.presentation.screens.home.providers.HomeScreenPreviewProvider
 import com.gondroid.randomchallengeapp.ui.theme.RandomChallengeAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
