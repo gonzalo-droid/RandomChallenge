@@ -9,10 +9,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.gondroid.randomchallengeapp.data.FakeTaskLocalDataSource
 import com.gondroid.randomchallengeapp.domain.Task
 import com.gondroid.randomchallengeapp.domain.TaskLocalDataSource
-import com.gondroid.randomchallengeapp.navigation.TaskScreenDes
+import com.gondroid.randomchallengeapp.presentation.navigation.TaskScreenDes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
