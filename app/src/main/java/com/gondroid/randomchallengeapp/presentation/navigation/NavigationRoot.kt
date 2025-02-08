@@ -12,7 +12,6 @@ import com.gondroid.randomchallengeapp.presentation.screens.detail.TaskScreenRoo
 import com.gondroid.randomchallengeapp.presentation.screens.detail.TaskViewModel
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreenRoot
 import com.gondroid.randomchallengeapp.presentation.screens.home.HomeScreenViewModel
-import kotlinx.serialization.Serializable
 
 @Composable
 fun NavigationRoot(
@@ -25,15 +24,15 @@ fun NavigationRoot(
     {
         NavHost(
             navController = navController,
-            startDestination = HomeScreenDes
+            startDestination = HomeScreenRoute
         ) {
-            composable<HomeScreenDes> {
+            composable<HomeScreenRoute> {
                 val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
                 HomeScreenRoot(
                     viewModel = homeScreenViewModel,
                     navigateToTaskScreen = { taskId ->
                         navController.navigate(
-                            TaskScreenDes(
+                            TaskScreenRoute(
                                 taskId = taskId
                             )
                         )
@@ -41,7 +40,7 @@ fun NavigationRoot(
                 )
             }
 
-            composable<TaskScreenDes> {
+            composable<TaskScreenRoute> {
                 val taskViewModel = hiltViewModel<TaskViewModel>()
                 TaskScreenRoot(
                     viewModel = taskViewModel,
@@ -53,9 +52,3 @@ fun NavigationRoot(
         }
     }
 }
-
-@Serializable
-object HomeScreenDes
-
-@Serializable
-data class TaskScreenDes(val taskId: String? = null)
