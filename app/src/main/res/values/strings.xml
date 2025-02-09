@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Todo App</string>
+  <string name="app_name">Note.AI</string>
     <string name="delete_all">Delete all</string>
     <string name="summary">You have %s pending tasks</string>
     <string name="pending_tasks">Pending</string>

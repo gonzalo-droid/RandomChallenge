@@ -14,11 +14,11 @@ room {
 
 
 android {
-    namespace = "com.gondroid.randomchallengeapp"
+    namespace = "com.gondroid.noteai"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gondroid.randomchallengeapp"
+        applicationId = "com.gondroid.noteai"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -76,6 +76,8 @@ dependencies {
 
     // https://material-foundation.github.io/material-theme-builder/
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.foundation.android)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -91,5 +93,16 @@ dependencies {
 
     //Libreria Serializacion
     implementation(libs.kotlinx.serialization.json)
+
+    //Moshi
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
+    implementation(libs.moshi.kotlin)
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
+    //OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
 
 }
