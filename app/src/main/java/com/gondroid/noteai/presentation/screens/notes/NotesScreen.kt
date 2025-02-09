@@ -129,13 +129,13 @@ fun NotesScreen(
             Note(
                 id = "1",
                 title = "Project Deadline",
-                content = "Submit project report by Friday.",
+                content = "Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday.",
                 category = Category.WORK
             ),
             Note(
                 id = "2",
                 title = "Grocery List",
-                content = "Milk, eggs, bread, and coffee.",
+                content = "Milk, eggs, bread, eggs, bread, and coffee.",
                 category = Category.PERSONAL
             ),
             Note(
@@ -182,6 +182,24 @@ fun NotesScreen(
             ),
             Note(
                 id = "10",
+                title = "Budget Plan",
+                content = "Track monthly expenses and savings.",
+                category = Category.FINANCE
+            ),
+            Note(
+                id = "11",
+                title = "Travel Checklist",
+                content = "Passport, tickets, charger, and toiletries.",
+                category = Category.PERSONAL
+            ),
+            Note(
+                id = "12",
+                title = "Course Notes",
+                content = "Key takeaways from the Kotlin coroutines course.",
+                category = Category.LEARNING
+            ),
+            Note(
+                id = "13",
                 title = "Budget Plan",
                 content = "Track monthly expenses and savings.",
                 category = Category.FINANCE

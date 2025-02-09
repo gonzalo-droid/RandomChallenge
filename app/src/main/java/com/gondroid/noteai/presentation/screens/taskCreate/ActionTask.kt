@@ -1,4 +1,4 @@
-package com.gondroid.noteai.presentation.screens.detail
+package com.gondroid.noteai.presentation.screens.taskCreate
 
 import com.gondroid.noteai.domain.Category
 

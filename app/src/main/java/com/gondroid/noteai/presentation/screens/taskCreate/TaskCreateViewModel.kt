@@ -1,4 +1,4 @@
-package com.gondroid.noteai.presentation.screens.detail
+package com.gondroid.noteai.presentation.screens.taskCreate
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.getValue
@@ -22,15 +22,15 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskViewModel @Inject constructor(
+class TaskCreateViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val localDataSource: TaskLocalDataSource
 ) : ViewModel() {
 
-    var state by mutableStateOf(TaskScreenState())
+    var state by mutableStateOf(TaskCreateScreenState())
         private set
 
-    private var eventChannel = Channel<TaskEvent>()
+    private var eventChannel = Channel<TaskCreateEvent>()
 
     val event = eventChannel.receiveAsFlow()
     private val canSaveTask = snapshotFlow { state.taskName.text.toString() }
@@ -73,7 +73,7 @@ class TaskViewModel @Inject constructor(
                 is ActionTask.SaveTask -> {
 
                     editedTask?.let {
-                        this@TaskViewModel.localDataSource.updateTask(
+                        this@TaskCreateViewModel.localDataSource.updateTask(
                             updatedTask = it.copy(
                                 id = it.id,
                                 title = state.taskName.text.toString(),
@@ -94,7 +94,7 @@ class TaskViewModel @Inject constructor(
                             task = task
                         )
                     }
-                    eventChannel.send(TaskEvent.TaskCreated)
+                    eventChannel.send(TaskCreateEvent.TaskCreated)
                 }
 
                 else -> Unit

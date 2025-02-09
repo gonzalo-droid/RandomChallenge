@@ -1,6 +1,7 @@
 package com.gondroid.noteai.presentation.screens.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.gondroid.noteai.domain.Category
 import com.gondroid.noteai.domain.Note
 import com.gondroid.noteai.ui.theme.NoteAppTheme
@@ -59,7 +61,10 @@ fun NoteItem(
             .height(randomHeight.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(randomColor())
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable {
+                onItemSelected()
+            },
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
@@ -90,11 +95,14 @@ fun NoteItem(
         }
         Text(
             text = note.category?.name ?: "",
-            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.align(Alignment.BottomEnd).clip(RoundedCornerShape(8.dp))
-                .background(randomColor())
+            fontSize = 10.sp,
+            color = Color.White,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.Gray)
+                .padding(horizontal = 4.dp, vertical = 1.dp)
         )
     }
 }
@@ -104,6 +112,6 @@ fun randomColor(): Color {
         red = Random.nextFloat(),
         green = Random.nextFloat(),
         blue = Random.nextFloat(),
-        alpha = 1f
+        alpha = 0.5f
     )
 }

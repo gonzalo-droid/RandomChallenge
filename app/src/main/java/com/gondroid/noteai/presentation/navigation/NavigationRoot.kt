@@ -9,8 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gondroid.noteai.presentation.screens.TestScreenRoot
-import com.gondroid.noteai.presentation.screens.detail.TaskScreenRoot
-import com.gondroid.noteai.presentation.screens.detail.TaskViewModel
+import com.gondroid.noteai.presentation.screens.taskCreate.TaskScreenRoot
+import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateViewModel
 import com.gondroid.noteai.presentation.screens.home.HomeScreenRoot
 import com.gondroid.noteai.presentation.screens.home.HomeScreenViewModel
 import com.gondroid.noteai.presentation.screens.notes.NotesScreenRoot
@@ -44,7 +44,7 @@ fun NavigationRoot(
             }
 
             composable<TaskScreenRoute> {
-                val taskViewModel = hiltViewModel<TaskViewModel>()
+                val taskViewModel = hiltViewModel<TaskCreateViewModel>()
                 TaskScreenRoot(
                     viewModel = taskViewModel,
                     navigateBack = {

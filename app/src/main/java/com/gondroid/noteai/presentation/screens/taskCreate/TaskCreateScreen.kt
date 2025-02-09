@@ -1,4 +1,4 @@
-package com.gondroid.noteai.presentation.screens.detail
+package com.gondroid.noteai.presentation.screens.taskCreate
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
@@ -47,13 +47,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.gondroid.noteai.R
 import com.gondroid.noteai.domain.Category
-import com.gondroid.noteai.presentation.screens.detail.providers.TaskScreenStatePreviewProvider
+import com.gondroid.noteai.presentation.screens.taskCreate.providers.TaskScreenStatePreviewProvider
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
 fun TaskScreenRoot(
     navigateBack: () -> Boolean,
-    viewModel: TaskViewModel
+    viewModel: TaskCreateViewModel
 ) {
     val state = viewModel.state
     val event = viewModel.event
@@ -63,7 +63,7 @@ fun TaskScreenRoot(
     LaunchedEffect(true) {
         event.collect { event ->
             when(event){
-                is TaskEvent.TaskCreated -> {
+                is TaskCreateEvent.TaskCreated -> {
                     Toast.makeText(
                         context,
                         context.getString(R.string.task_created),
@@ -95,7 +95,7 @@ fun TaskScreenRoot(
 @Composable
 fun TaskScreen(
     modifier: Modifier = Modifier,
-    state: TaskScreenState,
+    state: TaskCreateScreenState,
     onAction: (ActionTask) -> Unit
 ) {
 
@@ -334,7 +334,7 @@ fun TaskScreen(
 @Composable
 @Preview
 fun TaskScreenLightPreview(
-    @PreviewParameter(TaskScreenStatePreviewProvider::class) state: TaskScreenState
+    @PreviewParameter(TaskScreenStatePreviewProvider::class) state: TaskCreateScreenState
 ) {
     NoteAppTheme {
         TaskScreen(
@@ -349,7 +349,7 @@ fun TaskScreenLightPreview(
     uiMode = UI_MODE_NIGHT_YES
 )
 fun TaskScreenDarkPreview(
-    @PreviewParameter(TaskScreenStatePreviewProvider::class) state: TaskScreenState
+    @PreviewParameter(TaskScreenStatePreviewProvider::class) state: TaskCreateScreenState
 ) {
     NoteAppTheme {
         TaskScreen(
