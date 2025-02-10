@@ -3,10 +3,16 @@ package com.gondroid.noteai.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeScreenRoute
+object TaskScreenRoute
+
 @Serializable
-object NotesScreenRoute
+object NoteScreenRoute
+
 @Serializable
 object TestScreenRoute
+
 @Serializable
-data class TaskScreenRoute(val taskId: String? = null)
+data class TaskCreateScreenRoute(val taskId: String? = null)
+
+@Serializable
+data class NoteCreateScreenRoute(val noteId: String? = null)

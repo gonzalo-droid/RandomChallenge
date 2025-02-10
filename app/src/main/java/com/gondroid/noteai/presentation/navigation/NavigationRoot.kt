@@ -9,12 +9,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gondroid.noteai.presentation.screens.TestScreenRoot
-import com.gondroid.noteai.presentation.screens.taskCreate.TaskScreenRoot
-import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateViewModel
-import com.gondroid.noteai.presentation.screens.home.HomeScreenRoot
-import com.gondroid.noteai.presentation.screens.home.HomeScreenViewModel
+import com.gondroid.noteai.presentation.screens.noteCreate.NoteCreateScreenRoot
+import com.gondroid.noteai.presentation.screens.noteCreate.NoteCreateViewModel
+import com.gondroid.noteai.presentation.screens.notes.NoteScreenViewModel
 import com.gondroid.noteai.presentation.screens.notes.NotesScreenRoot
-import com.gondroid.noteai.presentation.screens.notes.NotesViewModel
+import com.gondroid.noteai.presentation.screens.task.TaskScreenRoot
+import com.gondroid.noteai.presentation.screens.task.TaskScreenViewModel
+import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateScreenRoot
+import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateViewModel
 
 @Composable
 fun NavigationRoot(
@@ -29,13 +31,38 @@ fun NavigationRoot(
             navController = navController,
             startDestination = TestScreenRoute
         ) {
-            composable<HomeScreenRoute> {
-                val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
-                HomeScreenRoot(
-                    viewModel = homeScreenViewModel,
-                    navigateToTaskScreen = { taskId ->
+            composable<NoteScreenRoute> {
+                val viewmodel = hiltViewModel<NoteScreenViewModel>()
+                NotesScreenRoot(
+                    viewModel = viewmodel,
+                    navigateTo = { noteId ->
                         navController.navigate(
-                            TaskScreenRoute(
+                            NoteCreateScreenRoute(
+                                noteId = noteId
+                            )
+                        )
+                    }
+                )
+            }
+
+            composable<NoteCreateScreenRoute> {
+                val viewmodel = hiltViewModel<NoteCreateViewModel>()
+                NoteCreateScreenRoot(
+                    viewModel = viewmodel,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable<TaskScreenRoute> {
+                val viewmodel = hiltViewModel<TaskScreenViewModel>()
+                TaskScreenRoot(
+                    viewModel = viewmodel,
+                    navigateToTaskCreateScreen = { taskId ->
+                        navController.navigate(
+                            TaskCreateScreenRoute(
                                 taskId = taskId
                             )
                         )
@@ -43,10 +70,10 @@ fun NavigationRoot(
                 )
             }
 
-            composable<TaskScreenRoute> {
-                val taskViewModel = hiltViewModel<TaskCreateViewModel>()
-                TaskScreenRoot(
-                    viewModel = taskViewModel,
+            composable<TaskCreateScreenRoute> {
+                val viewmodel = hiltViewModel<TaskCreateViewModel>()
+                TaskCreateScreenRoot(
+                    viewModel = viewmodel,
                     navigateBack = {
                         navController.navigateUp()
                     }
@@ -55,13 +82,6 @@ fun NavigationRoot(
 
             composable<TestScreenRoute> {
                 TestScreenRoot()
-            }
-
-            composable<NotesScreenRoute> {
-                val notesViewModel = hiltViewModel<NotesViewModel>()
-                NotesScreenRoot(
-                    viewModel = notesViewModel
-                )
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.gondroid.noteai.presentation.screens.taskCreate
+package com.gondroid.noteai.presentation.screens.noteCreate
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -47,13 +46,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.gondroid.noteai.R
 import com.gondroid.noteai.domain.Category
-import com.gondroid.noteai.presentation.screens.taskCreate.providers.TaskCreateScreenStatePreviewProvider
+import com.gondroid.noteai.presentation.screens.noteCreate.providers.NoteCreateScreenStatePreviewProvider
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
-fun TaskCreateScreenRoot(
+fun NoteCreateScreenRoot(
     navigateBack: () -> Boolean,
-    viewModel: TaskCreateViewModel
+    viewModel: NoteCreateViewModel
 ) {
     val state = viewModel.state
     val event = viewModel.event
@@ -62,8 +61,8 @@ fun TaskCreateScreenRoot(
 
     LaunchedEffect(true) {
         event.collect { event ->
-            when(event){
-                is TaskCreateEvent.TaskCreated -> {
+            when (event) {
+                is NoteCreateEvent.NoteCreated -> {
                     Toast.makeText(
                         context,
                         context.getString(R.string.task_created),
@@ -75,13 +74,14 @@ fun TaskCreateScreenRoot(
         }
     }
 
-    TaskCreateScreen(
+    NoteCreateScreen(
         state = state,
         onAction = { action ->
-            when(action){
-                is ActionTask.Back -> {
+            when (action) {
+                is ActionNoteCreate.Back -> {
                     navigateBack()
                 }
+
                 else -> {
                     viewModel.onAction(action)
                 }
@@ -93,10 +93,10 @@ fun TaskCreateScreenRoot(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCreateScreen(
+fun NoteCreateScreen(
     modifier: Modifier = Modifier,
-    state: TaskCreateScreenState,
-    onAction: (ActionTask) -> Unit
+    state: NoteCreateScreenState,
+    onAction: (ActionNoteCreate) -> Unit
 ) {
 
     var isDescriptionFocus by remember {
@@ -112,7 +112,7 @@ fun TaskCreateScreen(
                 title = {
                     Text(
                         style = MaterialTheme.typography.headlineSmall,
-                        text = stringResource(R.string.task)
+                        text = stringResource(R.string.note)
                     )
                 },
                 navigationIcon = {
@@ -122,7 +122,7 @@ fun TaskCreateScreen(
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.clickable {
                             onAction(
-                                ActionTask.Back
+                                ActionNoteCreate.Back
                             )
                         }
                     )
@@ -142,24 +142,7 @@ fun TaskCreateScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.done),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onSurface
-                    ),
-                    modifier = Modifier.padding(8.dp)
-                )
 
-                Checkbox(
-                    checked = state.isTaskDone,
-                    onCheckedChange = {
-                        onAction(
-                            ActionTask.ChangeTaskDone(
-                                isTaskDone = it
-                            )
-                        )
-                    },
-                )
                 Spacer(
                     modifier = Modifier.weight(1f)
                 )
@@ -191,7 +174,7 @@ fun TaskCreateScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Add Task",
+                            contentDescription = "Add Note",
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                         DropdownMenu(
@@ -216,7 +199,7 @@ fun TaskCreateScreen(
                                             .clickable {
                                                 isExpanded = false
                                                 onAction(
-                                                    ActionTask.ChangeTaskCategory(
+                                                    ActionNoteCreate.ChangeNoteCategory(
                                                         category = category
                                                     )
                                                 )
@@ -232,7 +215,7 @@ fun TaskCreateScreen(
 
 
             BasicTextField(
-                state = state.taskName,
+                state = state.title,
                 textStyle = MaterialTheme.typography.headlineLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
@@ -246,7 +229,7 @@ fun TaskCreateScreen(
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        if ((state.taskName.text.toString().isEmpty())) {
+                        if ((state.title.text.toString().isEmpty())) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(R.string.task_name),
@@ -265,7 +248,7 @@ fun TaskCreateScreen(
             )
 
             BasicTextField(
-                state = state.taskDescription,
+                state = state.content,
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
                 textStyle = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface
@@ -285,7 +268,7 @@ fun TaskCreateScreen(
                     },
                 decorator = { innerTextField ->
                     Column {
-                        if (state.taskDescription.text.toString()
+                        if (state.content.text.toString()
                                 .isEmpty() && !isDescriptionFocus
                         ) {
                             Text(
@@ -307,10 +290,10 @@ fun TaskCreateScreen(
 
 
             Button(
-                enabled = state.canSaveTask,
+                enabled = state.canSaveNote,
                 onClick = {
                     onAction(
-                        ActionTask.SaveTask
+                        ActionNoteCreate.SaveNote
                     )
                 },
                 modifier = Modifier
@@ -319,7 +302,7 @@ fun TaskCreateScreen(
                 Text(
                     text = stringResource(R.string.save),
                     style = MaterialTheme.typography.titleMedium,
-                    color = if (state.canSaveTask)
+                    color = if (state.canSaveNote)
                         MaterialTheme.colorScheme.onPrimary
                     else
                         MaterialTheme.colorScheme.onPrimaryContainer
@@ -332,11 +315,11 @@ fun TaskCreateScreen(
 
 @Composable
 @Preview
-fun TaskCreateScreenLightPreview(
-    @PreviewParameter(TaskCreateScreenStatePreviewProvider::class) state: TaskCreateScreenState
+fun NoteScreenLightPreview(
+    @PreviewParameter(NoteCreateScreenStatePreviewProvider::class) state: NoteCreateScreenState
 ) {
     NoteAppTheme {
-        TaskCreateScreen(
+        NoteCreateScreen(
             state = state,
             onAction = {}
         )
@@ -347,11 +330,11 @@ fun TaskCreateScreenLightPreview(
 @Preview(
     uiMode = UI_MODE_NIGHT_YES
 )
-fun TaskCreateScreenDarkPreview(
-    @PreviewParameter(TaskCreateScreenStatePreviewProvider::class) state: TaskCreateScreenState
+fun NoteScreenDarkPreview(
+    @PreviewParameter(NoteCreateScreenStatePreviewProvider::class) state: NoteCreateScreenState
 ) {
     NoteAppTheme {
-        TaskCreateScreen(
+        NoteCreateScreen(
             state = state,
             onAction = {}
         )

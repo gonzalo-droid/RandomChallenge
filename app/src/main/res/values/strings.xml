@@ -1,17 +1,18 @@
 <resources>
-  <string name="app_name">Note.AI</string>
+    <string name="app_name">Note.AI</string>
     <string name="delete_all">Delete all</string>
     <string name="summary">You have %s pending tasks</string>
     <string name="pending_tasks">Pending</string>
     <string name="completed_tasks">Completed</string>
-  <string name="task_deleted">Delete task</string>
-  <string name="task_updated">Done task</string>
-  <string name="all_task_deleted">Delete all tasks</string>
+    <string name="task_deleted">Delete task</string>
+    <string name="task_updated">Done task</string>
+    <string name="all_task_deleted">Delete all tasks</string>
     <string name="task">Task</string>
     <string name="done">Done</string>
     <string name="category">Category</string>
     <string name="save">Save</string>
-  <string name="task_name">Task name</string>
-  <string name="task_description">Description</string>
+    <string name="task_name">Task name</string>
+    <string name="task_description">Description</string>
     <string name="task_created">Task created</string>
+    <string name="note">Note</string>
 </resources>

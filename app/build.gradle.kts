@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -12,6 +14,16 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
+
+// Local Properties
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+val apiKeyOpenAI: String = localProperties.getProperty("API_KEY_OPENAI", "")
 
 android {
     namespace = "com.gondroid.noteai"
@@ -28,6 +40,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "API_KEY_OPENAI", "\"${apiKeyOpenAI}\"")
+
     }
 
     buildTypes {
@@ -50,6 +65,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true // Habilitar BuildConfig
         compose = true
     }
 

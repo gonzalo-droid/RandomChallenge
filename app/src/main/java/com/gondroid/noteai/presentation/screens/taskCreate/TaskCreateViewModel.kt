@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.gondroid.noteai.domain.Task
-import com.gondroid.noteai.domain.TaskLocalDataSource
-import com.gondroid.noteai.presentation.navigation.TaskScreenRoute
+import com.gondroid.noteai.domain.repository.TaskLocalDataSource
+import com.gondroid.noteai.presentation.navigation.TaskCreateScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
@@ -34,7 +34,7 @@ class TaskCreateViewModel @Inject constructor(
 
     val event = eventChannel.receiveAsFlow()
     private val canSaveTask = snapshotFlow { state.taskName.text.toString() }
-    private val taskData = savedStateHandle.toRoute<TaskScreenRoute>()
+    private val taskData = savedStateHandle.toRoute<TaskCreateScreenRoute>()
 
     private var editedTask: Task? = null
 

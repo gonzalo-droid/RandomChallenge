@@ -1,9 +1,9 @@
 package com.gondroid.noteai.data
 
 import com.gondroid.noteai.domain.Task
-import com.gondroid.noteai.domain.TaskLocalDataSource
-import com.gondroid.noteai.presentation.screens.home.providers.completedTask
-import com.gondroid.noteai.presentation.screens.home.providers.pendingTask
+import com.gondroid.noteai.domain.repository.TaskLocalDataSource
+import com.gondroid.noteai.presentation.screens.task.providers.completedTask
+import com.gondroid.noteai.presentation.screens.task.providers.pendingTask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
