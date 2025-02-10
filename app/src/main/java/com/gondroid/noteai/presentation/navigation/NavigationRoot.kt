@@ -29,7 +29,7 @@ fun NavigationRoot(
     {
         NavHost(
             navController = navController,
-            startDestination = TestScreenRoute
+            startDestination = NoteScreenRoute
         ) {
             composable<NoteScreenRoute> {
                 val viewmodel = hiltViewModel<NoteScreenViewModel>()

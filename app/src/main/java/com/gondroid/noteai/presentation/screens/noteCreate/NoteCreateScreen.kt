@@ -232,7 +232,7 @@ fun NoteCreateScreen(
                         if ((state.title.text.toString().isEmpty())) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
-                                text = stringResource(R.string.task_name),
+                                text = stringResource(R.string.title),
                                 color = MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = 0.5f
                                 ),
@@ -272,7 +272,7 @@ fun NoteCreateScreen(
                                 .isEmpty() && !isDescriptionFocus
                         ) {
                             Text(
-                                text = stringResource(R.string.task_description),
+                                text = stringResource(R.string.write_your_ideas),
                                 color = MaterialTheme.colorScheme.onSurface.copy(
                                     alpha = 0.5f
                                 )

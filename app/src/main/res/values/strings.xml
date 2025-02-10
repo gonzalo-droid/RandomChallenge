@@ -15,4 +15,6 @@
     <string name="task_description">Description</string>
     <string name="task_created">Task created</string>
     <string name="note">Note</string>
+    <string name="title">Título</string>
+    <string name="write_your_ideas">Escribe tus ideas...</string>
 </resources>

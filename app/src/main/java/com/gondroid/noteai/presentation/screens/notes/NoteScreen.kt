@@ -50,7 +50,13 @@ fun NotesScreenRoot(
 
     NotesScreen(
         state = state,
-        onAction = { }
+        onAction = { action ->
+            when(action){
+                is NoteScreenAction.OnAddNote -> navigateTo(null)
+                is NoteScreenAction.OnClickNote -> navigateTo(action.noteId)
+                else -> viewModel.onAction(action)
+            }
+        }
     )
 }
 
@@ -113,7 +119,7 @@ fun NotesScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                    onAction(NoteScreenAction.OnAddNote)
                 },
                 content = {
                     Icon(
