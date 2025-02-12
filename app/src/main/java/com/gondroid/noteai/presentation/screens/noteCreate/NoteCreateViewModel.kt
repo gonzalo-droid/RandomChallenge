@@ -46,7 +46,7 @@ class NoteCreateViewModel @Inject constructor(
                     state = state.copy(
                         title = TextFieldState(task.title),
                         content = TextFieldState(task.content ?: ""),
-                        category = if(task.category == null) null else task.category.toString()
+                        category = if(task.category == null || task.category == "null") null else task.category.toString()
                     )
                 }
             }

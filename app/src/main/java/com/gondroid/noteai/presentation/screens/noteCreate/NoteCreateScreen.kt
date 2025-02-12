@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -37,13 +41,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.gondroid.noteai.R
 import com.gondroid.noteai.domain.Category
 import com.gondroid.noteai.presentation.screens.noteCreate.providers.NoteCreateScreenStatePreviewProvider
@@ -56,7 +63,6 @@ fun NoteCreateScreenRoot(
 ) {
     val state = viewModel.state
     val event = viewModel.event
-
     val context = LocalContext.current
 
     LaunchedEffect(true) {
@@ -247,6 +253,42 @@ fun NoteCreateScreen(
                 }
             )
 
+            Box(
+                modifier = modifier
+                    .wrapContentSize()
+                    .padding(bottom = 4.dp, end = 4.dp)
+                    .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
+                    .background(Color.White)
+                    .clickable {
+
+                    },
+                contentAlignment = Alignment.TopStart
+            ) {
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterStart),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.co,
+                        contentDescription = "Nota de voz",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "Nota de voz",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+
+            }
+
+
             BasicTextField(
                 state = state.content,
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
@@ -256,7 +298,7 @@ fun NoteCreateScreen(
                 lineLimits = if (isDescriptionFocus)
                     TextFieldLineLimits.MultiLine(
                         minHeightInLines = 1,
-                        maxHeightInLines = 5
+                        maxHeightInLines = 10
                     )
                 else
                     TextFieldLineLimits.Default,

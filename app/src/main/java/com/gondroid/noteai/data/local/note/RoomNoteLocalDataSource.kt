@@ -15,6 +15,7 @@ class RoomNoteLocalDataSource @Inject constructor(
     private val noteDao: NoteDao,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
 ) : NoteLocalDataSource {
+
     override val notesFlow: Flow<List<Note>>
         get() = noteDao.getAllNotes().map {
             it.map { noteEntity -> noteEntity.toNote() }

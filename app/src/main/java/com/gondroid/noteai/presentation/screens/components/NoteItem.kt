@@ -49,11 +49,11 @@ fun NoteItemPreview() {
 @Composable
 fun NoteItem(
     modifier: Modifier = Modifier,
-    onItemSelected: () -> Unit,
+    onItemSelected: (String) -> Unit,
     note: Note
 ) {
 
-    val randomHeight = remember { Random.nextInt(100, 300) } // Altura aleatoria entre 100 y 300 dp
+    val randomHeight = remember { Random.nextInt(100, 300) }
 
     Box(
         modifier = Modifier
@@ -63,7 +63,7 @@ fun NoteItem(
             .background(randomColor())
             .padding(16.dp)
             .clickable {
-                onItemSelected()
+                onItemSelected(note.id)
             },
     ) {
         Column(
@@ -72,6 +72,9 @@ fun NoteItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(randomHeight.dp)
+                .clickable {
+                    onItemSelected(note.id)
+                }
         ) {
             Text(
                 text = note.title,
@@ -95,17 +98,20 @@ fun NoteItem(
 
             Spacer(Modifier.weight(1f))
         }
-        Text(
-            text = note.category?.toString() ?: "",
-            fontWeight = FontWeight.Bold,
-            fontSize = 10.sp,
-            color = Color.White,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.Gray)
-                .padding(horizontal = 4.dp, vertical = 1.dp)
-        )
+
+        note.category?.let{ it ->
+            Text(
+                text = it,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.Gray)
+                    .padding(horizontal = 4.dp, vertical = 1.dp)
+            )
+        }
     }
 }
 
@@ -114,6 +120,6 @@ fun randomColor(): Color {
         red = Random.nextFloat(),
         green = Random.nextFloat(),
         blue = Random.nextFloat(),
-        alpha = 0.5f
+        alpha = 0.3f
     )
 }

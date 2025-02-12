@@ -6,6 +6,6 @@ data class Note(
     val id: String,
     val title: String,
     val content: String?,
-    val category: String? = null,
+    val category: String?,
     val date: LocalDateTime = LocalDateTime.now()
 )

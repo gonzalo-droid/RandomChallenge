@@ -33,7 +33,8 @@ class DataModule {
             context.applicationContext,
             NotesDatabase::class.java,
             "notes_database"
-        ).build()
+        ).fallbackToDestructiveMigration() // Esto elimina y recrea la base de datos en cambios de esquema
+            .build()
     }
 
     @Provides

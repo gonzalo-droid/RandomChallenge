@@ -47,11 +47,10 @@ fun NotesScreenRoot(
     val event = viewModel.events
     val context = LocalContext.current
 
-
     NotesScreen(
         state = state,
         onAction = { action ->
-            when(action){
+            when (action) {
                 is NoteScreenAction.OnAddNote -> navigateTo(null)
                 is NoteScreenAction.OnClickNote -> navigateTo(action.noteId)
                 else -> viewModel.onAction(action)
@@ -146,7 +145,7 @@ fun NotesScreen(
                 NoteItem(
                     modifier = Modifier,
                     onItemSelected = {
-
+                        onAction(NoteScreenAction.OnClickNote(noteId = note.id))
                     },
                     note = note
                 )
