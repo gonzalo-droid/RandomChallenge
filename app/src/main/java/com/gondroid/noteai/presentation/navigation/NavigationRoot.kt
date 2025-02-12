@@ -17,6 +17,7 @@ import com.gondroid.noteai.presentation.screens.task.TaskScreenRoot
 import com.gondroid.noteai.presentation.screens.task.TaskScreenViewModel
 import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateScreenRoot
 import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateViewModel
+import com.gondroid.noteai.presentation.screens.voiceRecorder.VoiceRecorderScreenRoot
 
 @Composable
 fun NavigationRoot(
@@ -51,6 +52,9 @@ fun NavigationRoot(
                     viewModel = viewmodel,
                     navigateBack = {
                         navController.navigateUp()
+                    },
+                    navigateToVoiceRecorder = {
+                        navController.navigate(VoiceRecorderScreen)
                     }
                 )
             }
@@ -82,6 +86,10 @@ fun NavigationRoot(
 
             composable<TestScreenRoute> {
                 TestScreenRoot()
+            }
+
+            composable<VoiceRecorderScreen> {
+                VoiceRecorderScreenRoot()
             }
         }
     }

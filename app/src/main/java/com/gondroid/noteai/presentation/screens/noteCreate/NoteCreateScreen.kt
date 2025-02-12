@@ -24,6 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,11 +56,13 @@ import androidx.compose.ui.unit.sp
 import com.gondroid.noteai.R
 import com.gondroid.noteai.domain.Category
 import com.gondroid.noteai.presentation.screens.noteCreate.providers.NoteCreateScreenStatePreviewProvider
+import com.gondroid.noteai.presentation.screens.notes.NoteScreenAction
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
 fun NoteCreateScreenRoot(
     navigateBack: () -> Boolean,
+    navigateToVoiceRecorder : () -> Unit,
     viewModel: NoteCreateViewModel
 ) {
     val state = viewModel.state
@@ -86,6 +90,10 @@ fun NoteCreateScreenRoot(
             when (action) {
                 is ActionNoteCreate.Back -> {
                     navigateBack()
+                }
+
+                is ActionNoteCreate.VoiceRecorder ->  {
+                    navigateToVoiceRecorder()
                 }
 
                 else -> {
@@ -253,41 +261,32 @@ fun NoteCreateScreen(
                 }
             )
 
-            Box(
-                modifier = modifier
+            Row(
+                modifier = Modifier
                     .wrapContentSize()
-                    .padding(bottom = 4.dp, end = 4.dp)
                     .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
                     .background(Color.White)
                     .clickable {
-
-                    },
-                contentAlignment = Alignment.TopStart
+                        onAction(ActionNoteCreate.VoiceRecorder)
+                    }
+                    .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.CenterStart),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.co,
-                        contentDescription = "Nota de voz",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "Nota de voz",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Mic,
+                    contentDescription = "Nota de voz",
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(24.dp).padding(4.dp)
+                )
 
+                Text(
+                    text = "Nota de voz",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
             }
-
 
             BasicTextField(
                 state = state.content,
