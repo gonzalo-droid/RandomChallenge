@@ -48,8 +48,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gondroid.noteai.presentation.AudioRecorder
-import com.gondroid.noteai.presentation.WhisperTranscriber
+import com.gondroid.noteai.presentation.screens.voiceRecorder.AudioRecorder
+import com.gondroid.noteai.presentation.screens.voiceRecorder.WhisperTranscriber
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,7 +68,6 @@ fun TestScreenRoot() {
     var progress by remember { mutableFloatStateOf(0f) }
     var duration by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
-
     var whisperText by remember { mutableStateOf<String?>(null) }
 
 

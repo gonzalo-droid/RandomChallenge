@@ -1,4 +1,4 @@
-package com.gondroid.noteai.presentation
+package com.gondroid.noteai.presentation.screens.voiceRecorder
 
 import android.util.Log
 import com.gondroid.noteai.BuildConfig
