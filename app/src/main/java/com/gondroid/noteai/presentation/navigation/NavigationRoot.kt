@@ -89,7 +89,11 @@ fun NavigationRoot(
             }
 
             composable<VoiceRecorderScreen> {
-                VoiceRecorderScreenRoot()
+                VoiceRecorderScreenRoot(
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }

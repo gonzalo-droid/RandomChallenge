@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -105,7 +108,7 @@ fun NoteCreateScreenRoot(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun NoteCreateScreen(
     modifier: Modifier = Modifier,
@@ -261,32 +264,17 @@ fun NoteCreateScreen(
                 }
             )
 
-            Row(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
-                    .background(Color.White)
-                    .clickable {
-                        onAction(ActionNoteCreate.VoiceRecorder)
-                    }
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+            FlowRow(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(
-                    imageVector = Icons.Default.Mic,
-                    contentDescription = "Nota de voz",
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(24.dp).padding(4.dp)
-                )
-
-                Text(
-                    text = "Nota de voz",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                ItemSheep(
+                    modifier,
+                    onAction = {},
+                    name = "Nota de voz",
+                    imageVector = Icons.Default.Mic
                 )
             }
+
 
             BasicTextField(
                 state = state.content,
@@ -351,6 +339,40 @@ fun NoteCreateScreen(
             }
         }
 
+    }
+}
+
+
+@Composable
+fun ItemSheep(modifier: Modifier,
+              onAction: (ActionNoteCreate) -> Unit, name:String, imageVector: ImageVector){
+    Row(
+        modifier = Modifier
+            .wrapContentSize()
+            .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
+            .background(Color.White)
+            .clickable {
+                onAction(ActionNoteCreate.VoiceRecorder)
+            }
+            .padding(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(
+            imageVector =imageVector,
+            contentDescription = "Nota de voz",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .size(24.dp)
+                .padding(4.dp)
+        )
+
+        Text(
+            text = name,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
     }
 }
 

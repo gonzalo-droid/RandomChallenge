@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.math.absoluteValue
 
 class AudioRecorder {
@@ -99,6 +100,29 @@ class AudioRecorder {
             Log.e("AudioRecorder", "Error resumeRecording", e)
         }
     }
+
+    fun cancelRecording() {
+        try {
+            mediaRecorder?.apply {
+                stop()
+                reset()
+                release()
+            }
+            mediaRecorder = null
+
+            // Eliminar el archivo grabado
+            val file = File(outputFile)
+            if (file.exists()) {
+                file.delete()
+                Log.d("AudioRecorder", "Archivo eliminado: $outputFile")
+            } else {
+                Log.d("AudioRecorder", "No se encontró el archivo para eliminar.")
+            }
+        } catch (e: Exception) {
+            Log.e("AudioRecorder", "Error al cancelar la grabación", e)
+        }
+    }
+
 
     fun getAmplitudeFlow(): StateFlow<List<Float>> = amplitudes
 
