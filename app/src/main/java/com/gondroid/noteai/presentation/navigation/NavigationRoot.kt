@@ -54,7 +54,10 @@ fun NavigationRoot(
                         navController.navigateUp()
                     },
                     navigateToVoiceRecorder = {
-                        navController.navigate(VoiceRecorderScreen)
+                        navController.navigate(VoiceRecorderRoute)
+                    },
+                    navigateToMyTask = {
+                        navController.navigate(TaskScreenRoute)
                     }
                 )
             }
@@ -84,11 +87,8 @@ fun NavigationRoot(
                 )
             }
 
-            composable<TestScreenRoute> {
-                TestScreenRoot()
-            }
 
-            composable<VoiceRecorderScreen> {
+            composable<VoiceRecorderRoute> {
                 VoiceRecorderScreenRoot(
                     navigateBack = {
                         navController.navigateUp()

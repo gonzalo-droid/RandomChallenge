@@ -67,6 +67,7 @@ import com.gondroid.noteai.ui.theme.NoteAppTheme
 fun NoteCreateScreenRoot(
     navigateBack: () -> Boolean,
     navigateToVoiceRecorder : () -> Unit,
+    navigateToMyTask : () -> Unit,
     viewModel: NoteCreateViewModel
 ) {
     val state = viewModel.state
@@ -98,6 +99,10 @@ fun NoteCreateScreenRoot(
 
                 is ActionNoteCreate.VoiceRecorder ->  {
                     navigateToVoiceRecorder()
+                }
+
+                is ActionNoteCreate.MyTask -> {
+                    navigateToMyTask()
                 }
 
                 else -> {
@@ -271,13 +276,21 @@ fun NoteCreateScreen(
             ) {
                 ItemSheep(
                     modifier,
-                    onAction = {},
+                    onAction = {
+                        onAction(
+                            ActionNoteCreate.VoiceRecorder
+                        )
+                    },
                     name = "Nota de voz",
                     imageVector = Icons.Default.Mic
                 )
                 ItemSheep(
                     modifier,
-                    onAction = {},
+                    onAction = {
+                        onAction(
+                            ActionNoteCreate.MyTask
+                        )
+                    },
                     name = "Mis tareas",
                     imageVector = Icons.Default.Task
                 )
@@ -293,7 +306,7 @@ fun NoteCreateScreen(
                 lineLimits = if (isDescriptionFocus)
                     TextFieldLineLimits.MultiLine(
                         minHeightInLines = 1,
-                        maxHeightInLines = 10
+                        maxHeightInLines = 20
                     )
                 else
                     TextFieldLineLimits.Default,
@@ -305,18 +318,13 @@ fun NoteCreateScreen(
                     },
                 decorator = { innerTextField ->
                     Column {
-                        if (state.content.text.toString()
-                                .isEmpty() && !isDescriptionFocus
-                        ) {
+                        if (state.content.text.toString().isEmpty() && !isDescriptionFocus) {
                             Text(
                                 text = stringResource(R.string.write_your_ideas),
-                                color = MaterialTheme.colorScheme.onSurface.copy(
-                                    alpha = 0.5f
-                                )
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                             )
-                        } else {
-                            innerTextField()
                         }
+                        innerTextField() // Renderiza el campo de texto dentro del Box
                     }
                 },
             )

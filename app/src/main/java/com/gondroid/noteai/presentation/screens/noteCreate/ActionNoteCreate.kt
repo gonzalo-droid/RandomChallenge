@@ -7,4 +7,5 @@ sealed interface ActionNoteCreate {
     data object Back : ActionNoteCreate
     data class ChangeNoteCategory(val category: Category?) : ActionNoteCreate
     data object VoiceRecorder : ActionNoteCreate
+    data object MyTask : ActionNoteCreate
 }
