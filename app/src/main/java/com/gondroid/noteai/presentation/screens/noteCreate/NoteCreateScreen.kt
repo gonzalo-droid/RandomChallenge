@@ -27,6 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.Task
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -265,13 +266,20 @@ fun NoteCreateScreen(
             )
 
             FlowRow(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ItemSheep(
                     modifier,
                     onAction = {},
                     name = "Nota de voz",
                     imageVector = Icons.Default.Mic
+                )
+                ItemSheep(
+                    modifier,
+                    onAction = {},
+                    name = "Mis tareas",
+                    imageVector = Icons.Default.Task
                 )
             }
 

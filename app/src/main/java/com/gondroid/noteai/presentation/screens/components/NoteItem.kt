@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,7 @@ fun NoteItemPreview() {
             note = Note(
                 id = "1",
                 title = "Project Deadline",
-                content = "Submit project report by Friday.",
+                content = "Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday.",
                 category = Category.WORK.toString()
             )
         )
@@ -53,14 +54,26 @@ fun NoteItem(
     note: Note
 ) {
 
-    val randomHeight = remember { Random.nextInt(100, 300) }
+    val randomHeight = remember {
+        Random.nextInt(100, 300)
+    }
+
+    val maxLines = when {
+        randomHeight < 150 -> 1
+        randomHeight < 200 -> 3
+        else -> 5
+    }
+
+    val randomColor = remember { randomColor() }
+    val darkenedColor = remember { darkenColor(randomColor, 0.7f) } // Reduce brillo en 30%
+
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(randomHeight.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(randomColor())
+            .background(randomColor)
             .padding(16.dp)
             .clickable {
                 onItemSelected(note.id)
@@ -89,8 +102,8 @@ fun NoteItem(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodySmall,
-                    maxLines = 5,
-                    overflow = TextOverflow.Ellipsis, // Hol..
+                    maxLines = maxLines,
+                    overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
@@ -99,20 +112,29 @@ fun NoteItem(
             Spacer(Modifier.weight(1f))
         }
 
-        note.category?.let{ it ->
+        note.category?.let { it ->
+
             Text(
                 text = it,
                 fontWeight = FontWeight.Bold,
-                fontSize = 10.sp,
-                color = Color.White,
+                fontSize = 8.sp,
+                color = darkenedColor,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Gray)
-                    .padding(horizontal = 4.dp, vertical = 1.dp)
             )
+
         }
     }
+}
+
+fun darkenColor(color: Color, factor: Float): Color {
+    return Color(
+        red = (color.red * factor).coerceIn(0f, 1f),
+        green = (color.green * factor).coerceIn(0f, 1f),
+        blue = (color.blue * factor).coerceIn(0f, 1f),
+        alpha = color.alpha // Mantiene la misma transparencia
+    )
 }
 
 fun randomColor(): Color {
@@ -120,6 +142,6 @@ fun randomColor(): Color {
         red = Random.nextFloat(),
         green = Random.nextFloat(),
         blue = Random.nextFloat(),
-        alpha = 0.3f
+        alpha = 0.2f
     )
 }

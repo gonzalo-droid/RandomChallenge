@@ -34,8 +34,10 @@ val notes = mutableListOf<Note>()
                 ),
                 Note(
                     id = "3",
-                    title = "Meeting Notes",
-                    content = "Discuss app redesign with the team.",
+                    title = "Resumen de Attack on Titan (Shingeki no Kyojin)",
+                    content = "La humanidad vive dentro de enormes murallas para protegerse de los titanes, gigantes devoradores de humanos. Eren Jaeger, junto a sus amigos Mikasa y Armin, presencia la destrucción de su hogar cuando el Titán Colosal abre una brecha en la Muralla María. Motivado por la venganza, Eren se une al Cuerpo de Exploración para luchar contra los titanes y descubrir la verdad detrás de su existencia.\n" +
+                            "\n" + "A lo largo de la historia, se revelan secretos sobre los titanes, las murallas y la verdadera historia del mundo. Traiciones, conspiraciones y batallas épicas llevan a Eren a tomar decisiones que cambiarán el destino de la humanidad.\n" +
+                            "\n" + "Es una historia llena de acción, drama y giros impactantes que explora la libertad, la guerra y la lucha por la supervivencia",
                     category = Category.WORK.toString()
                 ),
                 Note(

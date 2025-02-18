@@ -46,7 +46,7 @@ class NoteCreateViewModel @Inject constructor(
                     state = state.copy(
                         title = TextFieldState(task.title),
                         content = TextFieldState(task.content ?: ""),
-                        category = if(task.category == null || task.category == "null") null else task.category.toString()
+                        category = if (task.category == null || task.category == "null") null else task.category.toString()
                     )
                 }
             }
@@ -73,7 +73,7 @@ class NoteCreateViewModel @Inject constructor(
                                 id = it.id,
                                 title = state.title.text.toString(),
                                 content = state.content.text.toString(),
-                                category = state.category.toString()
+                                category = state.category
                             )
                         )
                     } ?: run {
@@ -81,7 +81,7 @@ class NoteCreateViewModel @Inject constructor(
                             id = UUID.randomUUID().toString(),
                             title = state.title.text.toString(),
                             content = state.content.text.toString(),
-                            category = state.category.toString()
+                            category = state.category
                         )
                         localDataSource.addNote(
                             note = note
