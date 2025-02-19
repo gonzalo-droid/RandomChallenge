@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -41,11 +42,13 @@ import com.gondroid.noteai.R
 import com.gondroid.noteai.presentation.screens.components.SectionTitle
 import com.gondroid.noteai.presentation.screens.components.SummaryInfo
 import com.gondroid.noteai.presentation.screens.components.TaskItem
+import com.gondroid.noteai.presentation.screens.noteCreate.ActionNoteCreate
 import com.gondroid.noteai.presentation.screens.task.providers.TaskScreenPreviewProvider
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
 fun TaskScreenRoot(
+    navigateBack: () -> Boolean,
     navigateToTaskCreateScreen: (String?) -> Unit,
     viewModel:TaskScreenViewModel
 ) {
@@ -94,6 +97,9 @@ fun TaskScreenRoot(
                 is TaskScreenAction.OnClickTask->{
                     navigateToTaskCreateScreen(action.taskId)
                 }
+                is TaskScreenAction.Back->{
+                    navigateBack()
+                }
                 else -> viewModel.onAction(action)
             }
         }
@@ -115,9 +121,21 @@ fun TaskScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.app_name),
+                        text = stringResource(R.string.task),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold
+                    )
+                },
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.clickable {
+                            onAction(
+                                TaskScreenAction.Back
+                            )
+                        }
                     )
                 },
                 actions = {

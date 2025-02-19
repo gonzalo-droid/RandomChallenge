@@ -3,6 +3,7 @@ package com.gondroid.noteai.presentation.screens.voiceRecorder
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Mic
@@ -39,10 +41,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gondroid.noteai.R
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +59,7 @@ import kotlin.random.Random
 @Composable
 fun VoiceRecorderScreenRoot(
     navigateBack: () -> Boolean,
-    ) {
+) {
     val context = LocalContext.current
     var initRecorder by remember { mutableStateOf(true) }
     var isPaused by remember { mutableStateOf(false) }
@@ -67,6 +71,15 @@ fun VoiceRecorderScreenRoot(
     var isEnableMic by remember { mutableStateOf(true) }
 
     VoiceRecorderScreen(
+        onAction = { action ->
+            when (action) {
+                is ActionVoiceRecorder.Back -> {
+                    navigateBack()
+                }
+
+                else -> {}
+            }
+        },
         elapsedTime = elapsedTime,
         initRecorder = initRecorder,
         isPaused = isPaused,
@@ -117,6 +130,7 @@ fun VoiceRecorderScreenRoot(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VoiceRecorderScreen(
+    onAction: (ActionVoiceRecorder) -> Unit,
     elapsedTime: Long,
     isPaused: Boolean,
     initRecorder: Boolean,
@@ -134,11 +148,23 @@ fun VoiceRecorderScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Notes.AI",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        text = stringResource(R.string.voice_recorder)
                     )
-                }
+                },
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.clickable {
+                            onAction(
+                                ActionVoiceRecorder.Back
+                            )
+                        }
+                    )
+                },
             )
         }
     ) { paddingValues ->
@@ -301,6 +327,7 @@ fun AudioVisualizer(audioRecorder: AudioRecorder, modifier: Modifier = Modifier)
 fun PreviewVoiceRecorderScreen() {
     NoteAppTheme {
         VoiceRecorderScreen(
+            onAction = {},
             elapsedTime = 0L,
             initRecorder = false,
             isPaused = true,

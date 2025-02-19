@@ -17,4 +17,5 @@
     <string name="note">Note</string>
     <string name="title">Título</string>
     <string name="write_your_ideas">Escribe tus ideas...</string>
+    <string name="voice_recorder">Voice Recorder</string>
 </resources>

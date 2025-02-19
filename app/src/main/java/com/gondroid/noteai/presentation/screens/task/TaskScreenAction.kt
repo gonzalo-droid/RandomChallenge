@@ -8,4 +8,5 @@ sealed interface TaskScreenAction {
     data object OnDeleteAllTasks : TaskScreenAction
     data object OnAddTask : TaskScreenAction
     data class OnClickTask(val taskId: String) : TaskScreenAction
+    data object Back : TaskScreenAction
 }

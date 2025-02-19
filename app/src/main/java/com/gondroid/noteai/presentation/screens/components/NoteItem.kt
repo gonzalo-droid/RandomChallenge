@@ -40,7 +40,7 @@ fun NoteItemPreview() {
             note = Note(
                 id = "1",
                 title = "Project Deadline",
-                content = "Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday.",
+                content = "Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday.",
                 category = Category.WORK.toString()
             )
         )
@@ -59,13 +59,14 @@ fun NoteItem(
     }
 
     val maxLines = when {
-        randomHeight < 150 -> 1
-        randomHeight < 200 -> 3
-        else -> 5
+        randomHeight <= 120 -> 1
+        randomHeight <= 150 -> 2
+        randomHeight <= 200 -> 4
+        else -> 7
     }
 
     val randomColor = remember { randomColor() }
-    val darkenedColor = remember { darkenColor(randomColor, 0.7f) } // Reduce brillo en 30%
+    val darkenedColor = remember { darkenColor(randomColor, 0.1f) } // Reduce brillo en 30%
 
 
     Box(
@@ -117,7 +118,7 @@ fun NoteItem(
             Text(
                 text = it,
                 fontWeight = FontWeight.Bold,
-                fontSize = 8.sp,
+                fontSize = 9.sp,
                 color = darkenedColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -133,7 +134,7 @@ fun darkenColor(color: Color, factor: Float): Color {
         red = (color.red * factor).coerceIn(0f, 1f),
         green = (color.green * factor).coerceIn(0f, 1f),
         blue = (color.blue * factor).coerceIn(0f, 1f),
-        alpha = color.alpha // Mantiene la misma transparencia
+        alpha = color.alpha
     )
 }
 

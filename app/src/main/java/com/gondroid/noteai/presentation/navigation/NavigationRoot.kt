@@ -67,6 +67,9 @@ fun NavigationRoot(
                 val viewmodel = hiltViewModel<TaskScreenViewModel>()
                 TaskScreenRoot(
                     viewModel = viewmodel,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
                     navigateToTaskCreateScreen = { taskId ->
                         navController.navigate(
                             TaskCreateScreenRoute(

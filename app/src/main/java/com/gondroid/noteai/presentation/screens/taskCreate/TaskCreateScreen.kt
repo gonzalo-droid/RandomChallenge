@@ -142,6 +142,9 @@ fun TaskCreateScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
                 Text(
                     text = stringResource(R.string.done),
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -160,74 +163,6 @@ fun TaskCreateScreen(
                         )
                     },
                 )
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable {
-                        isExpanded = true
-                    }
-                ) {
-
-                    Text(
-                        text = state.category?.toString() ?: stringResource(R.string.category),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = MaterialTheme.colorScheme.onSurface
-                        ),
-                        modifier = Modifier
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.outline,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(8.dp)
-                    )
-
-                    Box(
-                        modifier = Modifier.padding(8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Add Task",
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
-                        DropdownMenu(
-                            modifier = Modifier.background(
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest
-                            ),
-                            expanded = isExpanded,
-                            onDismissRequest = { isExpanded = false }
-                        ) {
-                            Column {
-                                Category.entries.forEach { category ->
-                                    Text(
-                                        text = category.name,
-                                        style = MaterialTheme.typography.bodyMedium.copy(
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        ),
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                            .padding(
-                                                8.dp
-                                            )
-                                            .clickable {
-                                                isExpanded = false
-                                                onAction(
-                                                    ActionTask.ChangeTaskCategory(
-                                                        category = category
-                                                    )
-                                                )
-                                            }
-                                    )
-                                }
-                            }
-
-                        }
-                    }
-                }
             }
 
 

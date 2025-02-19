@@ -134,7 +134,8 @@ fun NoteCreateScreen(
             TopAppBar(
                 title = {
                     Text(
-                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Bold,
                         text = stringResource(R.string.note)
                     )
                 },
@@ -179,7 +180,7 @@ fun NoteCreateScreen(
 
                     Text(
                         text = state.category?.toString() ?: stringResource(R.string.category),
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = MaterialTheme.typography.labelSmall .copy(
                             color = MaterialTheme.colorScheme.onSurface
                         ),
                         modifier = Modifier
