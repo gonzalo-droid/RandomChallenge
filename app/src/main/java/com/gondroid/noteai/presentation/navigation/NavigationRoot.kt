@@ -95,6 +95,12 @@ fun NavigationRoot(
                 VoiceRecorderScreenRoot(
                     navigateBack = {
                         navController.navigateUp()
+                    },
+                    onRecordingFinished = { filePath ->
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("recordedFilePath", filePath)
+                        navController.popBackStack()
                     }
                 )
             }

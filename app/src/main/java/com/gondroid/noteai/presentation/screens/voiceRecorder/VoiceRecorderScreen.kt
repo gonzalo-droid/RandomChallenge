@@ -29,7 +29,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,14 +54,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 
 @Composable
 fun VoiceRecorderScreenRoot(
     navigateBack: () -> Boolean,
+    onRecordingFinished: (String?) -> Unit
 ) {
-
 
     val context = LocalContext.current
     var isPaused by remember { mutableStateOf(false) }
@@ -98,7 +96,13 @@ fun VoiceRecorderScreenRoot(
         },
         stopRecording = {
             audioRecorder.stopRecording()
-            resetRecorderState()
+            // resetRecorderState()
+            isPaused = false
+            timerJob?.cancel()
+            elapsedTime = 0
+
+            Toast.makeText(context, "Guardando nota de voz", Toast.LENGTH_SHORT).show()
+            onRecordingFinished(recordedFilePath)
         },
         pauseRecording = {
             audioRecorder.pauseRecording()

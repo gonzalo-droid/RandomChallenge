@@ -55,7 +55,7 @@ class AudioRecorder {
                 prepare()
                 start()
             }
-            startAmplitudeTracking() 
+            startAmplitudeTracking()
             isPaused = false
             return outputFile
         } catch (e: Exception) {

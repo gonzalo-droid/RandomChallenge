@@ -1,7 +1,11 @@
 package com.gondroid.noteai.presentation.screens.noteCreate
 
+import android.Manifest
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,11 +27,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Task
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +52,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,19 +61,35 @@ import androidx.compose.ui.unit.sp
 import com.gondroid.noteai.R
 import com.gondroid.noteai.domain.Category
 import com.gondroid.noteai.presentation.screens.noteCreate.providers.NoteCreateScreenStatePreviewProvider
-import com.gondroid.noteai.presentation.screens.notes.NoteScreenAction
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
 fun NoteCreateScreenRoot(
     navigateBack: () -> Boolean,
-    navigateToVoiceRecorder : () -> Unit,
-    navigateToMyTask : () -> Unit,
+    navigateToVoiceRecorder: () -> Unit,
+    navigateToMyTask: () -> Unit,
     viewModel: NoteCreateViewModel
 ) {
     val state = viewModel.state
     val event = viewModel.event
     val context = LocalContext.current
+    var hasPermission by remember { mutableStateOf(false) }
+
+
+    // Solicita el permiso antes de grabar
+    RequestAudioPermission { granted ->
+        hasPermission = granted
+    }
+
+    val filePath by viewModel.recordedFilePath.collectAsState()
+
+    LaunchedEffect(filePath) {
+        filePath?.let {
+            Log.d("NoteCreateScreen", "Received recorded file path: $it")
+            if(it.isNotEmpty()) viewModel.saveAudioNoteToDatabase(it) // Llamar la función manualmente
+        }
+    }
+
 
     LaunchedEffect(true) {
         event.collect { event ->
@@ -84,6 +101,14 @@ fun NoteCreateScreenRoot(
                         Toast.LENGTH_SHORT
                     ).show()
                     navigateBack()
+                }
+
+                NoteCreateEvent.SaveVoiceRecorder -> {
+                    Toast.makeText(
+                        context,
+                        "Nota de voz guardada correctamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -97,7 +122,7 @@ fun NoteCreateScreenRoot(
                     navigateBack()
                 }
 
-                is ActionNoteCreate.VoiceRecorder ->  {
+                is ActionNoteCreate.VoiceRecorder -> {
                     navigateToVoiceRecorder()
                 }
 
@@ -180,7 +205,7 @@ fun NoteCreateScreen(
 
                     Text(
                         text = state.category?.toString() ?: stringResource(R.string.category),
-                        style = MaterialTheme.typography.labelSmall .copy(
+                        style = MaterialTheme.typography.labelSmall.copy(
                             color = MaterialTheme.colorScheme.onSurface
                         ),
                         modifier = Modifier
@@ -361,8 +386,10 @@ fun NoteCreateScreen(
 
 
 @Composable
-fun ItemSheep(modifier: Modifier,
-              onAction: (ActionNoteCreate) -> Unit, name:String, imageVector: ImageVector){
+fun ItemSheep(
+    modifier: Modifier,
+    onAction: (ActionNoteCreate) -> Unit, name: String, imageVector: ImageVector
+) {
     Row(
         modifier = Modifier
             .wrapContentSize()
@@ -376,7 +403,7 @@ fun ItemSheep(modifier: Modifier,
         horizontalArrangement = Arrangement.Start
     ) {
         Icon(
-            imageVector =imageVector,
+            imageVector = imageVector,
             contentDescription = "Nota de voz",
             tint = Color.Unspecified,
             modifier = Modifier
@@ -390,6 +417,24 @@ fun ItemSheep(modifier: Modifier,
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
+    }
+}
+
+@Composable
+fun RequestAudioPermission(onPermissionGranted: (Boolean) -> Unit) {
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            if (granted) {
+                onPermissionGranted(true)
+            } else {
+                Log.d("AudioRecorder", "Permiso de audio denegado")
+            }
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
     }
 }
 

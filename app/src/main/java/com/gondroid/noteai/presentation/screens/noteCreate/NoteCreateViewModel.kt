@@ -1,5 +1,6 @@
 package com.gondroid.noteai.presentation.screens.noteCreate
 
+import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,21 +11,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.gondroid.noteai.domain.Note
+import com.gondroid.noteai.domain.VoiceRecorder
 import com.gondroid.noteai.domain.repository.NoteLocalDataSource
+import com.gondroid.noteai.domain.repository.VoiceRecorderLocalDataSource
 import com.gondroid.noteai.presentation.navigation.NoteCreateScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteCreateViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val localDataSource: NoteLocalDataSource
+    private val localDataSource: NoteLocalDataSource,
+    private val voiceRecorderLocalDataSource: VoiceRecorderLocalDataSource
 ) : ViewModel() {
 
     var state by mutableStateOf(NoteCreateScreenState())
@@ -35,8 +42,10 @@ class NoteCreateViewModel @Inject constructor(
     val event = eventChannel.receiveAsFlow()
     private val canSaveNote = snapshotFlow { state.title.text.toString() }
     private val noteData = savedStateHandle.toRoute<NoteCreateScreenRoute>()
-
     private var editedNote: Note? = null
+
+    val recordedFilePath: StateFlow<String?> = savedStateHandle.getStateFlow("recordedFilePath", "")
+
 
     init {
         noteData.noteId?.let {
@@ -55,6 +64,41 @@ class NoteCreateViewModel @Inject constructor(
         canSaveNote.onEach {
             state = state.copy(canSaveNote = it.isNotEmpty())
         }.launchIn(viewModelScope)
+
+    }
+
+    fun getFilePath() {
+        viewModelScope.launch {
+            recordedFilePath.collectLatest { filePath ->
+                if (isValidPath(filePath)) {
+                    saveAudioNoteToDatabase(filePath!!)
+                } else {
+                    Log.e("MyViewModel", "Invalid file path: $filePath")
+                }
+            }
+        }
+    }
+
+    private fun isValidPath(filePath: String?): Boolean {
+        return !filePath.isNullOrBlank() && File(filePath).exists()
+    }
+
+    fun saveAudioNoteToDatabase(filePath: String) {
+        editedNote?.id?.let { noteId ->
+            viewModelScope.launch {
+                val voiceRecorder = VoiceRecorder(
+                    id = UUID.randomUUID().toString(),
+                    noteId = noteId,
+                    name = "Note Voice",
+                    path = filePath,
+                    transcription = null,
+                )
+                voiceRecorderLocalDataSource.addVoiceRecorder(voiceRecorder)
+
+                eventChannel.send(NoteCreateEvent.SaveVoiceRecorder)
+
+            }
+        }
     }
 
     fun onAction(action: ActionNoteCreate) {
@@ -88,6 +132,10 @@ class NoteCreateViewModel @Inject constructor(
                         )
                     }
                     eventChannel.send(NoteCreateEvent.NoteCreated)
+                }
+
+                is ActionNoteCreate.SaveVoiceRecorder -> {
+
                 }
 
                 else -> Unit
