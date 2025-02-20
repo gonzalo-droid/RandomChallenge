@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Environment
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.absoluteValue
 
@@ -38,7 +40,7 @@ class AudioRecorder {
 
     fun startRecording(): String? {
         try {
-            if (mediaRecorder != null) return null // Ya está grabando
+            if (mediaRecorder != null) return null // Already recording
 
             val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
             if (!directory.exists()) directory.mkdirs()
@@ -53,7 +55,7 @@ class AudioRecorder {
                 prepare()
                 start()
             }
-            startAmplitudeTracking() // Iniciar medición de amplitudes
+            startAmplitudeTracking() 
             isPaused = false
             return outputFile
         } catch (e: Exception) {
@@ -71,11 +73,15 @@ class AudioRecorder {
             mediaRecorder = null
 
             recordingJob?.cancel()
-            audioRecord?.stop()
-            audioRecord?.release()
+            audioRecord?.apply {
+                if (recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+                    stop()
+                }
+                release()
+            }
             audioRecord = null
         } catch (e: Exception) {
-            Log.e("AudioRecorder", "Error stopRecording", e)
+            Log.e("AudioRecorder", "Error in stopRecording", e)
         }
     }
 
@@ -86,7 +92,7 @@ class AudioRecorder {
                 isPaused = true
             }
         } catch (e: Exception) {
-            Log.e("AudioRecorder", "Error pauseRecording", e)
+            Log.e("AudioRecorder", "Error in pauseRecording", e)
         }
     }
 
@@ -110,16 +116,18 @@ class AudioRecorder {
             }
             mediaRecorder = null
 
-            // Eliminar el archivo grabado
             val file = File(outputFile)
             if (file.exists()) {
-                file.delete()
-                Log.d("AudioRecorder", "Archivo eliminado: $outputFile")
+                if (file.delete()) {
+                    Log.d("AudioRecorder", "File deleted: $outputFile")
+                } else {
+                    Log.e("AudioRecorder", "Failed to delete file: $outputFile")
+                }
             } else {
-                Log.d("AudioRecorder", "No se encontró el archivo para eliminar.")
+                Log.d("AudioRecorder", "File not found: $outputFile")
             }
         } catch (e: Exception) {
-            Log.e("AudioRecorder", "Error al cancelar la grabación", e)
+            Log.e("AudioRecorder", "Error in cancelRecording", e)
         }
     }
 
@@ -148,7 +156,10 @@ class AudioRecorder {
                             .map { it.toFloat().absoluteValue / Short.MAX_VALUE }
                             .average()
                             .toFloat()
-                        _amplitudes.value = (_amplitudes.value + amplitude).takeLast(50)
+
+                        withContext(Dispatchers.Main) {
+                            _amplitudes.value = (_amplitudes.value + amplitude).takeLast(50)
+                        }
                     }
                 }
             }

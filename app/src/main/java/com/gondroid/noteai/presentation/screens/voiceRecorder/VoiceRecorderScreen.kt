@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +53,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -60,15 +62,21 @@ import kotlin.random.Random
 fun VoiceRecorderScreenRoot(
     navigateBack: () -> Boolean,
 ) {
+
+
     val context = LocalContext.current
-    var initRecorder by remember { mutableStateOf(true) }
     var isPaused by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
-    val timer = remember { mutableStateOf<Job?>(null) }
-    var amplitudes by remember { mutableStateOf(listOf<Float>()) }
+    var timerJob by remember { mutableStateOf<Job?>(null) }
     val audioRecorder = remember { AudioRecorder() }
     var recordedFilePath by remember { mutableStateOf<String?>(null) }
-    var isEnableMic by remember { mutableStateOf(true) }
+
+    fun resetRecorderState() {
+        isPaused = false
+        timerJob?.cancel()
+        elapsedTime = 0
+        recordedFilePath = null
+    }
 
     VoiceRecorderScreen(
         onAction = { action ->
@@ -76,53 +84,49 @@ fun VoiceRecorderScreenRoot(
                 is ActionVoiceRecorder.Back -> {
                     navigateBack()
                 }
-
-                else -> {}
             }
         },
         elapsedTime = elapsedTime,
-        initRecorder = initRecorder,
         isPaused = isPaused,
+        isRecording = recordedFilePath != null,
         audioRecorder = audioRecorder,
         cancelRecording = {
             audioRecorder.cancelRecording()
-            isPaused = false
-            timer.value?.cancel()
-            elapsedTime = 0
+            resetRecorderState()
+            Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
+            navigateBack()
         },
         stopRecording = {
             audioRecorder.stopRecording()
-            isPaused = false
-            timer.value?.cancel()
-            elapsedTime = 0
-
-            Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
-            navigateBack()
+            resetRecorderState()
         },
         pauseRecording = {
             audioRecorder.pauseRecording()
             isPaused = true
-            timer.value?.cancel()
+            timerJob?.cancel()
         },
         startRecording = {
             recordedFilePath = audioRecorder.startRecording()
-            isPaused = false
-            initRecorder = false
-            timer.value?.cancel()
-            timer.value = CoroutineScope(Dispatchers.Main).launch {
-                while (true) {
-                    delay(1000)
-                    elapsedTime++
-                    val newAmplitude =
-                        Random.nextDouble(0.2, 1.0).toFloat() // Valor aleatorio para simular audio
-                    amplitudes =
-                        (amplitudes + newAmplitude).takeLast(50) // Mantiene las últimas 50 muestras
+            if (recordedFilePath != null) {
+                isPaused = false
+                timerJob?.cancel()
+                timerJob = CoroutineScope(Dispatchers.Main).launch {
+                    while (isActive) {
+                        delay(1000)
+                        elapsedTime++
+                    }
                 }
             }
         },
         resumeRecording = {
             audioRecorder.resumeRecording()
             isPaused = false
+            timerJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(1000)
+                    elapsedTime++
+                }
+            }
         }
     )
 }
@@ -133,7 +137,7 @@ fun VoiceRecorderScreen(
     onAction: (ActionVoiceRecorder) -> Unit,
     elapsedTime: Long,
     isPaused: Boolean,
-    initRecorder: Boolean,
+    isRecording: Boolean,
     audioRecorder: AudioRecorder,
     cancelRecording: () -> Unit,
     stopRecording: () -> Unit,
@@ -198,14 +202,14 @@ fun VoiceRecorderScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                if (!initRecorder) {
+                if (isRecording) {
                     IconButton(
-                        onClick = { cancelRecording() },
+                        onClick = cancelRecording,
                         modifier = Modifier.size(64.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Stop record",
+                            contentDescription = "Cancel Recording",
                             tint = Color.White,
                             modifier = Modifier
                                 .size(48.dp)
@@ -213,47 +217,29 @@ fun VoiceRecorderScreen(
                                 .padding(12.dp)
                         )
                     }
+
                     IconButton(
-                        onClick = { if (isPaused) pauseRecording() else resumeRecording() },
+                        onClick = { if (isPaused) resumeRecording() else pauseRecording() },
                         modifier = Modifier.size(64.dp)
                     ) {
                         Icon(
-                            imageVector = if (isPaused) Icons.Default.Pause else Icons.Default.Mic,
-                            contentDescription = if (isPaused) "Pause record" else "Start record",
+                            imageVector = if (isPaused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                            contentDescription = if (isPaused) "Resume Recording" else "Pause Recording",
                             tint = Color.White,
                             modifier = Modifier
                                 .size(48.dp)
-                                .background(Color.Red, CircleShape)
+                                .background(if (isPaused) Color.Green else Color.Red, CircleShape)
                                 .padding(12.dp)
                         )
                     }
-                }
 
-                if (initRecorder) {
                     IconButton(
-                        onClick = { startRecording() },
-                        modifier = Modifier.size(64.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Mic,
-                            contentDescription = "Start record",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(Color.Red, CircleShape)
-                                .padding(12.dp)
-                        )
-                    }
-                }
-
-                if (!initRecorder) {
-                    IconButton(
-                        onClick = { stopRecording() },
+                        onClick = stopRecording,
                         modifier = Modifier.size(64.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = "Save record",
+                            contentDescription = "Stop Recording",
                             tint = Color.White,
                             modifier = Modifier
                                 .size(48.dp)
@@ -261,41 +247,23 @@ fun VoiceRecorderScreen(
                                 .padding(12.dp)
                         )
                     }
+                } else {
+                    IconButton(
+                        onClick = startRecording,
+                        modifier = Modifier.size(64.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Mic,
+                            contentDescription = "Start Recording",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(Color.Red, CircleShape)
+                                .padding(12.dp)
+                        )
+                    }
                 }
-
-
             }
-        }
-    }
-}
-
-@Composable
-fun AudioRecorderVisualizer(modifier: Modifier = Modifier, isRecording: Boolean) {
-    var amplitudes by remember { mutableStateOf(List(50) { 0.1f }) }
-
-    LaunchedEffect(isRecording) {
-        while (isRecording) {
-            amplitudes = amplitudes.drop(1) + Random.nextFloat()
-            delay(100) // Simula la frecuencia de actualización
-        }
-    }
-
-    Canvas(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(100.dp)
-    ) {
-        val barWidth = size.width / amplitudes.size
-        val maxHeight = size.height
-
-        amplitudes.forEachIndexed { index, amplitude ->
-            val barHeight = maxHeight * amplitude
-            drawRect(
-                color = Color(0xFFE65100), // Naranja fuerte
-                topLeft = Offset(index * barWidth, (maxHeight - barHeight) / 2),
-                size = Size(barWidth * 0.8f, barHeight),
-                alpha = 0.8f
-            )
         }
     }
 }
@@ -305,7 +273,7 @@ fun AudioRecorderVisualizer(modifier: Modifier = Modifier, isRecording: Boolean)
 fun AudioVisualizer(audioRecorder: AudioRecorder, modifier: Modifier = Modifier) {
     val amplitudes by audioRecorder.getAmplitudeFlow().collectAsState(initial = List(50) { 0.1f })
 
-    Canvas(modifier = modifier) {
+    Canvas(modifier = modifier.fillMaxSize()) {
         val barWidth = size.width / amplitudes.size
         val maxHeight = size.height
 
@@ -329,7 +297,7 @@ fun PreviewVoiceRecorderScreen() {
         VoiceRecorderScreen(
             onAction = {},
             elapsedTime = 0L,
-            initRecorder = false,
+            isRecording = true,
             isPaused = true,
             audioRecorder = AudioRecorder(),
             stopRecording = {},
