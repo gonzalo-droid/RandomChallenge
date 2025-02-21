@@ -1,8 +1,13 @@
 package com.gondroid.noteai.presentation.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -46,8 +51,19 @@ fun NavigationRoot(
                 )
             }
 
-            composable<NoteCreateScreenRoute> {
+            composable<NoteCreateScreenRoute> { backStackEntry ->
+
                 val viewmodel = hiltViewModel<NoteCreateViewModel>()
+
+                val navBackStackEntry = remember { navController.currentBackStackEntry }
+
+                LaunchedEffect(navBackStackEntry) {
+                    navBackStackEntry?.savedStateHandle?.get<String>("recordedFilePath")?.let { filePath ->
+                        Log.d("NoteCreateScreen", "Received recordedFilePath: $filePath")
+                        viewmodel.updateRecordedFilePath(filePath)
+                    }
+                }
+
                 NoteCreateScreenRoot(
                     viewModel = viewmodel,
                     navigateBack = {
@@ -100,6 +116,10 @@ fun NavigationRoot(
                         navController.previousBackStackEntry
                             ?.savedStateHandle
                             ?.set("recordedFilePath", filePath)
+
+                        Log.d("NoteCreateScreen", "recordedFilePath : $filePath")
+
+
                         navController.popBackStack()
                     }
                 )

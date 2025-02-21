@@ -17,6 +17,7 @@ import com.gondroid.noteai.domain.repository.VoiceRecorderLocalDataSource
 import com.gondroid.noteai.presentation.navigation.NoteCreateScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -44,8 +45,13 @@ class NoteCreateViewModel @Inject constructor(
     private val noteData = savedStateHandle.toRoute<NoteCreateScreenRoute>()
     private var editedNote: Note? = null
 
-    val recordedFilePath: StateFlow<String?> = savedStateHandle.getStateFlow("recordedFilePath", "")
 
+    private val _recordedFilePath = MutableStateFlow<String?>(null)
+    val recordedFilePath: StateFlow<String?> = _recordedFilePath
+
+    fun updateRecordedFilePath(filePath: String) {
+        _recordedFilePath.value = filePath
+    }
 
     init {
         noteData.noteId?.let {
@@ -64,6 +70,12 @@ class NoteCreateViewModel @Inject constructor(
         canSaveNote.onEach {
             state = state.copy(canSaveNote = it.isNotEmpty())
         }.launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            recordedFilePath.collect { filePath ->
+                Log.d("NoteCreateScreen", "Received recordedFilePath: $filePath")
+            }
+        }
 
     }
 

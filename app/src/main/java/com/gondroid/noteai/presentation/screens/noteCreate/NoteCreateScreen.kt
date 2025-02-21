@@ -58,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gondroid.noteai.R
 import com.gondroid.noteai.domain.Category
 import com.gondroid.noteai.presentation.screens.noteCreate.providers.NoteCreateScreenStatePreviewProvider
@@ -68,28 +69,24 @@ fun NoteCreateScreenRoot(
     navigateBack: () -> Boolean,
     navigateToVoiceRecorder: () -> Unit,
     navigateToMyTask: () -> Unit,
-    viewModel: NoteCreateViewModel
+    viewModel: NoteCreateViewModel,
 ) {
     val state = viewModel.state
     val event = viewModel.event
     val context = LocalContext.current
     var hasPermission by remember { mutableStateOf(false) }
-
-
     // Solicita el permiso antes de grabar
     RequestAudioPermission { granted ->
         hasPermission = granted
     }
 
-    val filePath by viewModel.recordedFilePath.collectAsState()
-
-    LaunchedEffect(filePath) {
-        filePath?.let {
-            Log.d("NoteCreateScreen", "Received recorded file path: $it")
-            if(it.isNotEmpty()) viewModel.saveAudioNoteToDatabase(it) // Llamar la función manualmente
+    // Sigue escuchando el StateFlow normalmente
+    val recordedFilePath by viewModel.recordedFilePath.collectAsState()
+    LaunchedEffect(recordedFilePath) {
+        recordedFilePath?.takeIf { it.isNotBlank() }?.let { filePath ->
+            viewModel.saveAudioNoteToDatabase(filePath)
         }
     }
-
 
     LaunchedEffect(true) {
         event.collect { event ->
