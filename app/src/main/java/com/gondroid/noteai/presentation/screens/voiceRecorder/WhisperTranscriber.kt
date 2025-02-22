@@ -20,7 +20,6 @@ class WhisperTranscriber() {
             .addFormDataPart("file", file.name, file.asRequestBody("audio/mpeg".toMediaTypeOrNull()))
             .addFormDataPart("model", "whisper-1")
             .build()
-        Log.d("WhisperTranscriber", requestBody.toString())
 
         val request = Request.Builder()
             .url("https://api.openai.com/v1/audio/transcriptions")
