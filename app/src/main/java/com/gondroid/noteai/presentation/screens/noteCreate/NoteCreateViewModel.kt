@@ -133,12 +133,19 @@ class NoteCreateViewModel @Inject constructor(
                 }
 
                 is ActionNoteCreate.SaveVoiceRecorder -> {
-
+                    var recordNew:VoiceRecorder? = null
                     state = state.copy(
                         voiceRecordings = state.voiceRecordings.map { record ->
-                            if (record.id == action.recordId) record.copy(transcription = action.transcription) else record
+                            if (record.id == action.recordId) {
+                                recordNew = record
+                                record.copy(transcription = action.transcription)
+                            } else record
                         }
                     )
+                    recordNew?.let{
+                        voiceRecorderLocalDataSource.updateVoiceRecorder(recordNew)
+                    }
+                    eventChannel.send(NoteCreateEvent.NoteCreated)
                 }
 
                 else -> Unit

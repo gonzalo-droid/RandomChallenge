@@ -110,10 +110,18 @@ fun NoteCreateScreenRoot(
                     navigateBack()
                 }
 
-                NoteCreateEvent.SaveVoiceRecorder -> {
+                is NoteCreateEvent.SaveVoiceRecorder -> {
                     Toast.makeText(
                         context,
                         "Nota de voz guardada correctamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is NoteCreateEvent.TranscriptionUpdate -> {
+                    Toast.makeText(
+                        context,
+                        "Transcripción actualizada",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -307,7 +315,9 @@ fun NoteCreateScreen(
                         }
                     )
                     FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         ItemSheep(
@@ -353,12 +363,14 @@ fun NoteCreateScreen(
                         audioUri = Uri.parse(record.path),
                         transcription = record.transcription, // Ahora mostramos la transcripción
                         onTranscribe = {
-                            whisperTranscriber.transcribeAudio(record.path) { text ->
-                                onAction(
-                                    ActionNoteCreate.SaveVoiceRecorder(
-                                        record.id, text ?: ""
+                            if (record.transcription.isNullOrEmpty()) {
+                                whisperTranscriber.transcribeAudio(record.path) { text ->
+                                    onAction(
+                                        ActionNoteCreate.SaveVoiceRecorder(
+                                            record.id, text ?: ""
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
                     )
