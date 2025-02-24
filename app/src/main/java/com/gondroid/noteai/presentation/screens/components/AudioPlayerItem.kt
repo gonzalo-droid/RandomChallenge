@@ -3,21 +3,29 @@ package com.gondroid.noteai.presentation.screens.components
 import android.media.MediaPlayer
 import android.net.Uri
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Textsms
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -118,11 +126,15 @@ fun AudioPlayerItem(
     isPlaying: Boolean,
     onTogglePlay: () -> Unit
 ) {
+
+    var isOpen by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(false) }
+
     Column {
         Row(
             modifier = modifier
                 .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.onTertiary)
+                .background(MaterialTheme.colorScheme.inversePrimary)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -145,13 +157,88 @@ fun AudioPlayerItem(
                     contentDescription = "Play/Pause"
                 )
             }
-            IconButton(onClick = onTranscribe) {
-                Icon(imageVector = Icons.Default.Textsms, contentDescription = "More Options")
+
+            if (!isLoading) {
+                IconButton(onClick = {
+                    onTranscribe()
+                    isLoading = true
+                }) {
+                    Icon(imageVector = Icons.Default.Textsms, contentDescription = "More Options")
+                }
+            } else {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(0.dp)
+                        .align(Alignment.CenterVertically)
+                        .width(30.dp)
+                        .height(30.dp),
+                    color = MaterialTheme.colorScheme.secondary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                )
             }
+
         }
 
+
+
         transcription?.let {
-            Text(text = it, modifier = Modifier.padding(2.dp))
+            isLoading = false
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 2.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.tertiary),
+                verticalArrangement = Arrangement.Top,
+            ) {
+                Button(
+                    onClick = { isOpen = !isOpen },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(
+                        topStart = 8.dp,
+                        topEnd = 8.dp,
+                        bottomEnd = 0.dp,
+                        bottomStart = 0.dp
+                    ),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                    )
+                ) {
+                    Text(
+                        text = "Trancripción"
+                    )
+                    Icon(
+                        imageVector = if (isOpen) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        contentDescription = null
+                    )
+                }
+
+                AnimatedVisibility(visible = isOpen) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.tertiary,
+                                shape = RoundedCornerShape(
+                                    topStart = 0.dp,
+                                    topEnd = 0.dp,
+                                    bottomEnd = 8.dp,
+                                    bottomStart = 8.dp
+                                )
+                            )
+                    ) {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .padding(8.dp)
+
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -186,7 +273,6 @@ fun CustomTooltipExample() {
 @Composable
 @Preview(
     showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
 )
 fun AudioPlayerItemDark() {
     NoteAppTheme {

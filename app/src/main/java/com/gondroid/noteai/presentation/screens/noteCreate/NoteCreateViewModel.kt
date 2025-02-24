@@ -62,8 +62,6 @@ class NoteCreateViewModel @Inject constructor(
                         category = if (task.category == null || task.category == "null") null else task.category.toString()
                     )
                 }
-
-
             }
 
 
@@ -85,6 +83,7 @@ class NoteCreateViewModel @Inject constructor(
     }
 
     fun saveAudioNoteToDatabase(filePath: String) {
+        updateRecordedFilePath(null)
         editedNote?.id?.let { noteId ->
             viewModelScope.launch {
                 val voiceRecorder = VoiceRecorder(
@@ -95,7 +94,6 @@ class NoteCreateViewModel @Inject constructor(
                     transcription = null,
                 )
                 voiceRecorderLocalDataSource.addVoiceRecorder(voiceRecorder)
-                updateRecordedFilePath(null)
                 eventChannel.send(NoteCreateEvent.SaveVoiceRecorder)
             }
         }

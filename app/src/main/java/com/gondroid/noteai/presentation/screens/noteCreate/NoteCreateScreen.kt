@@ -90,7 +90,6 @@ fun NoteCreateScreenRoot(
         hasPermission = granted
     }
 
-    // Sigue escuchando el StateFlow normalmente
     val recordedFilePath by viewModel.recordedFilePath.collectAsState()
     LaunchedEffect(recordedFilePath) {
         recordedFilePath?.takeIf { it.isNotBlank() }?.let { filePath ->
@@ -349,7 +348,9 @@ fun NoteCreateScreen(
                             .wrapContentHeight()
                     )
 
-                    HorizontalDivider()
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
                 }
 
                 items(

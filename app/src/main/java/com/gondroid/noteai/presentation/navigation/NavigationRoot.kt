@@ -59,7 +59,6 @@ fun NavigationRoot(
 
                 LaunchedEffect(navBackStackEntry) {
                     navBackStackEntry?.savedStateHandle?.get<String>("recordedFilePath")?.let { filePath ->
-                        Log.d("NoteCreateScreen", "Received recordedFilePath: $filePath")
                         viewmodel.updateRecordedFilePath(filePath)
                     }
                 }
@@ -116,10 +115,6 @@ fun NavigationRoot(
                         navController.previousBackStackEntry
                             ?.savedStateHandle
                             ?.set("recordedFilePath", filePath)
-
-                        Log.d("NoteCreateScreen", "recordedFilePath : $filePath")
-
-
                         navController.popBackStack()
                     }
                 )
