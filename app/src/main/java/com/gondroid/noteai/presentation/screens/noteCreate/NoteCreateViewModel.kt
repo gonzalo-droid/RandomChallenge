@@ -38,6 +38,7 @@ class NoteCreateViewModel @Inject constructor(
 
     private var eventChannel = Channel<NoteCreateEvent>()
 
+    // de channel to flow, UI event listening event
     val event = eventChannel.receiveAsFlow()
     private val canSaveNote = snapshotFlow { state.title.text.toString() }
     private val noteData = savedStateHandle.toRoute<NoteCreateScreenRoute>()
