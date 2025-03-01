@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.gondroid.noteai.R
 import com.gondroid.noteai.presentation.screens.components.NoteItem
 import com.gondroid.noteai.presentation.screens.notes.providers.NoteScreenPreviewProvider
+import com.gondroid.noteai.presentation.screens.notes.providers.notes
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
@@ -140,7 +141,7 @@ fun NotesScreen(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             items(
-                items = state.notes,
+                items = notes ,// state.notes,
             ) { note ->
                 NoteItem(
                     modifier = Modifier,
