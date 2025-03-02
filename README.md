@@ -1,105 +1,138 @@
 <h1 align="center">Note.AI</h1>
 
 <p align="center">
-  <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
-  <a href="https://android-arsenal.com/api?level=21"><img alt="API" src="https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat"/></a>
-  <a href="https://github.com/skydoves/pokedex-compose/actions"><img alt="Build Status" src="https://github.com/skydoves/pokedex-compose/workflows/Android%20CI/badge.svg"/></a> <br>
-  <a href="https://devlibrary.withgoogle.com/products/android/repos/skydoves-pokedex"><img alt="Google" src="https://skydoves.github.io/badges/google-devlib.svg"/></a>
-  <a href="https://proandroiddev.com/exploring-dagger-hilt-and-whats-main-differences-with-dagger-android-c8c54cd92f18"><img alt="Medium" src="https://skydoves.github.io/badges/Story-Medium.svg"/></a>
-  <a href="https://youtu.be/RG9ATodwbT4"><img alt="Profile" src="https://skydoves.github.io/badges/youtube-google-developers.svg"/></a> 
-  <a href="https://github.com/doveletter"><img alt="Profile" src="https://skydoves.github.io/badges/dove-letter.svg"/></a>
+  <a href="https://spdx.org/licenses/MIT.html"><img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg"/></a>
+  <a href="https://android-arsenal.com/api?level=26"><img alt="API" src="https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat"/></a><br>
+  <a href="https://www.youtube.com/@gonzalolock"><img alt="Profile" src="https://img.shields.io/youtube/channel/subscribers/UCPjql8JlN5kw6hU2U_tngaw?style=social"/></a> 
+  
+
 </p>
 
 <p align="center">  
-🤖 Note.AI modern Android development with Jetpack Compose, Hilt, Coroutines, Flow, Jetpack (Room, ViewModel), and Material Design based on MVVM architecture.
+🤖 Note.AI, proyecto android desarrollado con Jetpack Compose, Hilt, Coroutines, Flow, Jetpack (Room, ViewModel), Material3, arquitectura MVVM.
 </p>
 
 <p align="center">
-<img src="previews/screenshot.png"/>
+<img src="previews/ss_summary.png"/>
 </p>
 
-## Download
-Go to the [Releases](https://github.com/skydoves/pokedex-compose/releases) to download the latest APK.
+## Note.AI
+Es un proyecto personal que he estado compartiendo mis avances en mis redes sociales, he seguido el desarrollo moderno en android.
 
-<img src="previews/preview.gif" align="right" width="320"/>
+- **Notas:** Listado y creación de notas, guardadas en base de datos local.  
+- **Grabación de voz:** Notas de voz asociadas a las notas creadas. 
+- **Open.AI:** Transcripción de audio a texto usando el modelo Whisper.
+- **Configuración Centralizada:** Administra la configuración y claves de API con BuildKConfig.  
+- **Interfaz Moderna:** Construida con Kotlin Compose para una experiencia visual atractiva y responsiva.  
 
-## Tech stack & Open-source libraries
-- Minimum SDK level 26.
-- [Kotlin](https://kotlinlang.org/) based, utilizing [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous operations.
-- Jetpack Libraries:
-    - Jetpack Compose: Android’s modern toolkit for declarative UI development.
-    - Lifecycle: Observes Android lifecycles and manages UI states upon lifecycle changes.
-    - ViewModel: Manages UI-related data and is lifecycle-aware, ensuring data survival through configuration changes.
-    - Navigation: Facilitates screen navigation, complemented by [Hilt Navigation Compose](https://developer.android.com/jetpack/compose/libraries#hilt) for dependency injection.
-    - Room: Constructs a database with an SQLite abstraction layer for seamless database access.
-    - [Hilt](https://dagger.dev/hilt/): Facilitates dependency injection.
-- Architecture:
-    - MVVM Architecture (View - ViewModel - Model): Facilitates separation of concerns and promotes maintainability.
-    - Repository Pattern: Acts as a mediator between different data sources and the application's business logic.
-- [Kotlin Serialization](https://github.com/Kotlin/kotlinx.serialization): Kotlin multiplatform / multi-format reflectionless serialization.
-- [ksp](https://github.com/google/ksp): Kotlin Symbol Processing API for code generation and analysis.
-- [Turbine](https://github.com/cashapp/turbine): A small testing library for kotlinx.coroutines Flow.
-- [Baseline Profiles](https://medium.com/proandroiddev/improve-your-android-app-performance-with-baseline-profiles-297f388082e6): Enhances app performance by including specifications of classes and methods in the APK that can be utilized by Android Runtime.
+## 🛠️ Instalación y Configuración  
 
+##### 1️⃣ Clonar el Repositorio  
+```bash
+git clone https://github.com/gonzalo-droid/NoteAI.git
+```
+##### 2️⃣ Generar tu Clave de API KEY en Open.AI Platform
+- Visita https://platform.openai.com/docs/overview
+- Regístrate o inicia sesión.
+- Dirígete a la sección API de tu cuenta y genera una nueva clave de API
+- Recuerda que para el correcto funcionamiento debes agregar unos cuantos dolares para realizar las pruebas
+##### 3️⃣ Agregar la Clave de API en local.properties
+- En la raíz del proyecto, crea (o actualiza) un archivo llamado local.properties y agrega la siguiente línea:
+```bash
+API_KEY=TU_CLAVE_DE_API_AQUÍ
+```
+##### 4️⃣ Compilar y Ejecutar el Proyecto
+- Usa Gradle para compilar y ejecutar el proyecto:
+```bash
+./gradlew run
+```
+Para Android, abre el proyecto en Android Studio y ejecuta la aplicación desde allí. 📱🚀
+
+
+## Tech stack
+
+- **SDK mínimo:** 26.  
+- Basado en [Kotlin](https://kotlinlang.org/), utilizando [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) para operaciones asíncronas.  
+
+- **Jetpack Compose:** Kit de herramientas moderno de Android para desarrollo de UI declarativa.  
+- **Lifecycle:** Observa los ciclos de vida de Android y gestiona los estados de UI ante cambios de ciclo de vida.  
+- **ViewModel:** Administra datos relacionados con la UI y es consciente del ciclo de vida, asegurando la persistencia de datos tras cambios de configuración.  
+- **Navigation:** Facilita la navegación entre pantallas, complementado con [Hilt Navigation Compose](https://developer.android.com/jetpack/compose/libraries#hilt) para inyección de dependencias.  
+- **Room:** Permite construir una base de datos con una capa de abstracción sobre SQLite para un acceso eficiente a los datos.  
+- **[Hilt](https://dagger.dev/hilt/):** Simplifica la inyección de dependencias en la aplicación.  
+- **Arquitectura MVVM (View - ViewModel - Model):** Promueve la separación de responsabilidades y mejora el mantenimiento del código.  
+- **Patrón Repository:** Actúa como mediador entre diferentes fuentes de datos y la lógica de negocio de la aplicación.  
+- **[Kotlin Serialization](https://github.com/Kotlin/kotlinx.serialization):** Serialización sin reflejos para múltiples plataformas y formatos en Kotlin.  
+- **[ksp](https://github.com/google/ksp):** API de procesamiento de símbolos en Kotlin para generación y análisis de código.  
 
 ## Architecture
-**Note.AI** adheres to the MVVM architecture and implements the Repository pattern, aligning with [Google's official architecture guidance](https://developer.android.com/topic/architecture).
+**Note.AI** sigue la aquitectura MVVM e implementa patrón Repository, alineado con [Guía oficl de arquitectura de Google](https://developer.android.com/topic/architecture).
 
-The architecture of **Note.AI** is structured into two distinct layers: the UI layer and the data layer. Each layer fulfills specific roles and responsibilities, outlined as follows:
+La arquitectura de **Note.AI** está estructurada en dos capas distintas: la capa de UI y la capa de datos. Cada capa cumple roles y responsabilidades específicas, que se describen a continuación.  
 
-**Note.AI** follows the principles outlined in the [Guide to app architecture](https://developer.android.com/topic/architecture), making it an exemplary demonstration of architectural concepts in practical application.
+**Note.AI** sigue los principios establecidos en la [Guía de arquitectura de aplicaciones](https://developer.android.com/topic/architecture), lo que lo convierte en un excelente ejemplo de la aplicación práctica de conceptos arquitectónicos.  
+
 
 ### Architecture Overview
 
-![architecture](figure/figure1.png)
+- Cada capa sigue los principios de [flujo unidireccional de eventos/datos](https://developer.android.com/topic/architecture/ui-layer#udf): la capa de UI envía eventos del usuario a la capa de datos, y la capa de datos proporciona flujos de datos a otras capas.  
+- La capa de datos opera de forma independiente de las demás capas, manteniendo su pureza sin depender de capas externas.  
 
-- Each layer adheres to the principles of [unidirectional event/data flow](https://developer.android.com/topic/architecture/ui-layer#udf): the UI layer sends user events to the data layer, and the data layer provides data streams to other layers.
-- The data layer operates autonomously from other layers, maintaining purity without dependencies on external layers.
+✅ Esta arquitectura desacoplada mejora la reutilización de componentes y la escalabilidad de la aplicación, facilitando su desarrollo y mantenimiento.  
 
-This loosely coupled architecture enhances component reusability and app scalability, facilitating seamless development and maintenance.
 
-### UI Layer
+#### 🎨 Capa de UI  
 
-![architecture](figure/figure2.png)
+La capa de UI abarca los elementos visuales responsables de configurar las pantallas para la interacción del usuario, junto con el [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel), que gestiona los estados de la aplicación y restaura los datos durante los cambios de configuración.  
 
-The UI layer encompasses UI elements responsible for configuring screens for user interaction, alongside the [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel), which manages app states and restores data during configuration changes.
-- UI elements observe the data flow, ensuring synchronization with the underlying data layer.
+📌 **Principales características:**  
+- Los elementos de UI observan el flujo de datos, asegurando la sincronización con la capa de datos subyacente.  
+- Se encarga de manejar las interacciones del usuario y reflejar los cambios en la interfaz de manera eficiente.  
 
-### Data Layer
+#### 📂 Capa de Datos  
 
-![architecture](figure/figure3.png)
+La capa de datos está compuesta por repositorios que manejan la lógica de negocio, como la recuperación de datos desde una base de datos local o la obtención de datos remotos desde la red. Esta capa está diseñada para priorizar el acceso sin conexión, funcionando principalmente como un repositorio *offline-first* de la lógica de negocio.  
 
-The data layer is composed of repositories that handle business logic tasks such as retrieving data from a local database or fetching remote data from a network. This layer is designed to prioritize offline access, functioning primarily as an offline-first repository of business logic. It adheres to the principle of "single source of truth," ensuring that all data operations are centralized and consistent.<br>
-
-**Pokedex Compose** is an offline-first app, meaning it can perform all or most of its essential functions without an internet connection. This design allows users to access core features reliably, regardless of network availability, reducing their need for constant updates and decreasing data usage. For more details on how to build an offline-first application, you can visit [Build an offline-first app](https://developer.android.com/topic/architecture/data-layer/offline-first).
+📌 **Principales características:**  
+- Sigue el principio de **"fuente única de la verdad"** (*single source of truth*), garantizando que todas las operaciones de datos sean centralizadas y consistentes.  
+- Gestiona la persistencia de datos y la comunicación con fuentes externas.  
 
 ## Open API
-Note.AI use open.AI to transcription voice to text.
+Note.AI usa open.ai para la transcripción de las notas de voz a texto.
 
-## Find this repository useful? :heart:
-Support it by joining __[stargazers](https://github.com/skydoves/pokedex-compose/stargazers)__ for this repository. :star: <br>
-Also, __[follow me](https://github.com/skydoves)__ on GitHub for my next creations! 🤩
+### Sigamos en contacto
 
-# License MIT
-```
-Copyright (c) 2025 Gonzalo Lozg
+✨ **Espero que este proyecto te sea útil para seguir aprendiendo.**  
+💡 ¡Puedes colaborar en mejoras del proyecto dejando un *Pull Request*!  
+⭐ Además, agradecería mucho que le dieras una estrella al proyecto 🤩 
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Aún estoy definiendo el formato 🫠, pero lo importante es empezar. 
+¡Suscríbete y vamos a codear!
+- [YouTube](https://www.youtube.com/@gonzalolock)
+- [TikTok](https://www.tiktok.com/@gonzalock.dev)
+- [LinkedIn](https://www.linkedin.com/in/gonzalo-lozg/)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
-```
+## 🚀 ¡Contribuciones bienvenidas!  
+
+💡 **Si quieres proponer mejoras o corregir errores:**  
+1. Haz un *fork* del repositorio.  
+2. Crea una rama con tu mejora.
+  ```bash
+   git checkout -b feature/your-feature-name
+  ```
+3. Realiza los cambios y haz un *commit*.
+ ```bash
+   git commit -am 'Add some feature'
+   ```  
+4. Sube los cambios a tu repositorio.
+ ```bash
+   git push origin feature/your-feature-name
+   ```  
+5. Abre un *Pull Request* para revisión.  
+
+
+## License 
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
