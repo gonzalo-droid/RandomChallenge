@@ -6,7 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.gondroid.noteai.domain.repository.TaskLocalDataSource
+import com.gondroid.noteai.presentation.navigation.TaskScreenRoute
 import com.gondroid.noteai.presentation.screens.task.TaskScreenAction.OnDeleteAllTasks
 import com.gondroid.noteai.presentation.screens.task.TaskScreenAction.OnDeleteTask
 import com.gondroid.noteai.presentation.screens.task.TaskScreenAction.OnToggleTask
@@ -25,13 +27,15 @@ import javax.inject.Inject
 class TaskScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val taskLocalDataSource: TaskLocalDataSource
-):ViewModel() {
+) : ViewModel() {
 
-    var state by   mutableStateOf(TaskDataState())
+    var state by mutableStateOf(TaskDataState())
         private set
 
     private val eventChannel = Channel<TaskScreenEvent>()
     val events = eventChannel.receiveAsFlow()
+
+    private val noteData = savedStateHandle.toRoute<TaskScreenRoute>()
 
     init {
 
@@ -41,26 +45,30 @@ class TaskScreenViewModel @Inject constructor(
             }
         )
 
-        taskLocalDataSource.tasksFlow.onEach { tasks ->
+        noteData.noteId?.let {
+            state = state.copy(noteId = noteData.noteId)
 
-            val completedTasks = tasks
-                .filter { task -> task.isCompleted }
-                .sortedByDescending { task ->
-                    task.date
-                }
-            val pendingTasks = tasks
-                .filter { task ->
-                    !task.isCompleted
-                }.sortedByDescending { task ->
-                    task.date
-                }
+            taskLocalDataSource.tasksFlow.onEach { tasks ->
+                val taskFiler = tasks.filter { it.noteId == noteData.noteId }
+                val completedTasks = taskFiler
+                    .filter { task -> task.isCompleted }
+                    .sortedByDescending { task ->
+                        task.date
+                    }
+                val pendingTasks = taskFiler
+                    .filter { task ->
+                        !task.isCompleted
+                    }.sortedByDescending { task ->
+                        task.date
+                    }
 
-            state = state.copy(
-                summary = pendingTasks.size.toString(),
-                completedTask = completedTasks,
-                pendingTask = pendingTasks
-            )
-        }.launchIn(viewModelScope)
+                state = state.copy(
+                    summary = pendingTasks.size.toString(),
+                    completedTask = completedTasks,
+                    pendingTask = pendingTasks
+                )
+            }.launchIn(viewModelScope)
+        }
 
     }
 

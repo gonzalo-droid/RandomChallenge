@@ -12,6 +12,8 @@ import java.time.ZoneId
 data class TaskEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String,
+    @ColumnInfo(name = "note_id")
+    val noteId: String,
     val title: String,
     val description: String?,
     @ColumnInfo(name = "is_completed")
@@ -22,6 +24,7 @@ data class TaskEntity(
         fun fromTask(task: Task): TaskEntity {
             return TaskEntity(
                 id = task.id,
+                noteId = task.noteId,
                 title = task.title,
                 description = task.description,
                 isCompleted = task.isCompleted,
@@ -37,6 +40,7 @@ data class TaskEntity(
     fun toTask(): Task {
         return Task(
             id = id,
+            noteId = noteId,
             title = title,
             description = description,
             isCompleted = isCompleted,

@@ -42,15 +42,14 @@ import com.gondroid.noteai.R
 import com.gondroid.noteai.presentation.screens.components.SectionTitle
 import com.gondroid.noteai.presentation.screens.components.SummaryInfo
 import com.gondroid.noteai.presentation.screens.components.TaskItem
-import com.gondroid.noteai.presentation.screens.noteCreate.ActionNoteCreate
 import com.gondroid.noteai.presentation.screens.task.providers.TaskScreenPreviewProvider
 import com.gondroid.noteai.ui.theme.NoteAppTheme
 
 @Composable
 fun TaskScreenRoot(
     navigateBack: () -> Boolean,
-    navigateToTaskCreateScreen: (String?) -> Unit,
-    viewModel:TaskScreenViewModel
+    navigateToTaskCreateScreen: (taskId: String?, noteId: String) -> Unit,
+    viewModel: TaskScreenViewModel
 ) {
     val state = viewModel.state
     val event = viewModel.events
@@ -90,16 +89,19 @@ fun TaskScreenRoot(
     TaskScreen(
         state = state,
         onAction = { action ->
-            when(action){
-                is TaskScreenAction.OnAddTask->{
-                    navigateToTaskCreateScreen(null)
+            when (action) {
+                is TaskScreenAction.OnAddTask -> {
+                    navigateToTaskCreateScreen(null, state.noteId)
                 }
-                is TaskScreenAction.OnClickTask->{
-                    navigateToTaskCreateScreen(action.taskId)
+
+                is TaskScreenAction.OnClickTask -> {
+                    navigateToTaskCreateScreen(action.taskId, state.noteId)
                 }
-                is TaskScreenAction.Back->{
+
+                is TaskScreenAction.Back -> {
                     navigateBack()
                 }
+
                 else -> viewModel.onAction(action)
             }
         }

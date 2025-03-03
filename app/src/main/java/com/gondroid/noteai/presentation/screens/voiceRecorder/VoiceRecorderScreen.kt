@@ -91,17 +91,23 @@ fun VoiceRecorderScreenRoot(
         cancelRecording = {
             audioRecorder.cancelRecording()
             resetRecorderState()
-            Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.delete_voice_recorder),
+                Toast.LENGTH_SHORT
+            ).show()
             navigateBack()
         },
         stopRecording = {
             audioRecorder.stopRecording()
-            // resetRecorderState()
             isPaused = false
             timerJob?.cancel()
             elapsedTime = 0
-
-            Toast.makeText(context, "Guardando nota de voz", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.saving_voice_recorder),
+                Toast.LENGTH_SHORT
+            ).show()
             onRecordingFinished(recordedFilePath)
         },
         pauseRecording = {

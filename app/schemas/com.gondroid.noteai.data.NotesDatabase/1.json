@@ -2,15 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "39d68fe4803d0e4049aef6c87f8031e1",
+    "identityHash": "054df2dbbd457be0e1d2bd94c65190b4",
     "entities": [
       {
         "tableName": "tasks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `is_completed` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `note_id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `is_completed` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noteId",
+            "columnName": "note_id",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -146,7 +152,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '39d68fe4803d0e4049aef6c87f8031e1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '054df2dbbd457be0e1d2bd94c65190b4')"
     ]
   }
 }

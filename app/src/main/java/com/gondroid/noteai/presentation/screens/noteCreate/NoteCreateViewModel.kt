@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
@@ -53,6 +52,10 @@ class NoteCreateViewModel @Inject constructor(
     }
 
     init {
+
+
+        state = state.copy(noteId = noteData.noteId ?: UUID.randomUUID().toString())
+
         noteData.noteId?.let {
             viewModelScope.launch {
                 localDataSource.getNoteById(noteData.noteId)?.let { task ->
@@ -67,7 +70,7 @@ class NoteCreateViewModel @Inject constructor(
 
             voiceRecorderLocalDataSource.voiceRecordingsFlow.onEach { voiceRecordings ->
                 state = state.copy(
-                    voiceRecordings = voiceRecordings
+                    voiceRecordings = voiceRecordings.filter { it.noteId == noteData.noteId }
                 )
             }.launchIn(viewModelScope)
         }
@@ -76,10 +79,6 @@ class NoteCreateViewModel @Inject constructor(
             state = state.copy(canSaveNote = it.isNotEmpty())
         }.launchIn(viewModelScope)
 
-    }
-
-    private fun isValidPath(filePath: String?): Boolean {
-        return !filePath.isNullOrBlank() && File(filePath).exists()
     }
 
     fun saveAudioNoteToDatabase(filePath: String) {
@@ -117,15 +116,18 @@ class NoteCreateViewModel @Inject constructor(
                             )
                         )
                     } ?: run {
-                        val note = Note(
-                            id = UUID.randomUUID().toString(),
-                            title = state.title.text.toString(),
-                            content = state.content.text.toString(),
-                            category = state.category
-                        )
-                        localDataSource.addNote(
-                            note = note
-                        )
+                        state.noteId?.let {
+                            val note = Note(
+                                id = it,
+                                title = state.title.text.toString(),
+                                content = state.content.text.toString(),
+                                category = state.category
+                            )
+                            localDataSource.addNote(
+                                note = note
+                            )
+                        }
+
                     }
                     eventChannel.send(NoteCreateEvent.NoteCreated)
                 }

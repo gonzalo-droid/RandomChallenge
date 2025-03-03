@@ -54,9 +54,10 @@ fun NavigationRoot(
                 val navBackStackEntry = remember { navController.currentBackStackEntry }
 
                 LaunchedEffect(navBackStackEntry) {
-                    navBackStackEntry?.savedStateHandle?.get<String>("recordedFilePath")?.let { filePath ->
-                        viewmodel.updateRecordedFilePath(filePath)
-                    }
+                    navBackStackEntry?.savedStateHandle?.get<String>("recordedFilePath")
+                        ?.let { filePath ->
+                            viewmodel.updateRecordedFilePath(filePath)
+                        }
                 }
 
                 NoteCreateScreenRoot(
@@ -67,8 +68,8 @@ fun NavigationRoot(
                     navigateToVoiceRecorder = {
                         navController.navigate(VoiceRecorderRoute)
                     },
-                    navigateToMyTask = {
-                        navController.navigate(TaskScreenRoute)
+                    navigateToMyTask = { nodeId ->
+                        navController.navigate(TaskScreenRoute(noteId = nodeId))
                     }
                 )
             }
@@ -81,10 +82,11 @@ fun NavigationRoot(
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToTaskCreateScreen = { taskId ->
+                    navigateToTaskCreateScreen = { taskId, noteId ->
                         navController.navigate(
                             TaskCreateScreenRoute(
-                                taskId = taskId
+                                taskId = taskId,
+                                noteId = noteId
                             )
                         )
                     }

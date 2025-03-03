@@ -74,7 +74,7 @@ import com.gondroid.noteai.ui.theme.NoteAppTheme
 fun NoteCreateScreenRoot(
     navigateBack: () -> Boolean,
     navigateToVoiceRecorder: () -> Unit,
-    navigateToMyTask: () -> Unit,
+    navigateToMyTask: (String) -> Unit,
     viewModel: NoteCreateViewModel,
 ) {
     val state = viewModel.state
@@ -103,7 +103,7 @@ fun NoteCreateScreenRoot(
                 is NoteCreateEvent.NoteCreated -> {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.task_created),
+                        context.getString(R.string.note_created),
                         Toast.LENGTH_SHORT
                     ).show()
                     navigateBack()
@@ -112,7 +112,7 @@ fun NoteCreateScreenRoot(
                 is NoteCreateEvent.SaveVoiceRecorder -> {
                     Toast.makeText(
                         context,
-                        "Nota de voz guardada correctamente",
+                        context.getString(R.string.note_save_success),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -120,7 +120,7 @@ fun NoteCreateScreenRoot(
                 is NoteCreateEvent.TranscriptionUpdate -> {
                     Toast.makeText(
                         context,
-                        "Transcripción actualizada",
+                        context.getString(R.string.transcription_update),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -142,7 +142,9 @@ fun NoteCreateScreenRoot(
                 }
 
                 is ActionNoteCreate.MyTask -> {
-                    navigateToMyTask()
+                    state.noteId?.let {
+                        navigateToMyTask(it)
+                    }
                 }
 
                 else -> {

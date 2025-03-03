@@ -49,6 +49,7 @@ fun TaskItemPreview() {
             onToggleCompletion = {},
             task = Task(
                 id = "",
+                noteId = "",
                 title = "Task 1",
                 description = "Description 1",
                 isCompleted = false,

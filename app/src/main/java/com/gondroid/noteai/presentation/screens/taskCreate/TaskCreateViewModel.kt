@@ -39,6 +39,7 @@ class TaskCreateViewModel @Inject constructor(
     private var editedTask: Task? = null
 
     init {
+
         taskData.taskId?.let {
             viewModelScope.launch {
                 localDataSource.getTaskById(taskData.taskId)?.let { task ->
@@ -83,16 +84,20 @@ class TaskCreateViewModel @Inject constructor(
                             )
                         )
                     } ?: run {
-                        val task = Task(
-                            id = UUID.randomUUID().toString(),
-                            title = state.taskName.text.toString(),
-                            description = state.taskDescription.text.toString(),
-                            isCompleted = state.isTaskDone,
-                            category = state.category
-                        )
-                        localDataSource.addTask(
-                            task = task
-                        )
+                        taskData.noteId?.let { noteId ->
+                            val task = Task(
+                                id = UUID.randomUUID().toString(),
+                                noteId = noteId,
+                                title = state.taskName.text.toString(),
+                                description = state.taskDescription.text.toString(),
+                                isCompleted = state.isTaskDone,
+                                category = state.category
+                            )
+                            localDataSource.addTask(
+                                task = task
+                            )
+                        }
+
                     }
                     eventChannel.send(TaskCreateEvent.TaskCreated)
                 }

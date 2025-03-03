@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 
 data class Task(
     val id: String,
+    val noteId: String,
     val title: String,
     val description: String?,
     val isCompleted: Boolean = false,

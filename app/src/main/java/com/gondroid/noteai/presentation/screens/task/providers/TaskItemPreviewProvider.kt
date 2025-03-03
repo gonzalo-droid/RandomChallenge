@@ -9,6 +9,7 @@ class TaskItemPreviewProvider : PreviewParameterProvider<Task> {
         get() = sequenceOf(
             Task(
                 id = "1",
+                noteId = "",
                 title = "Task 1",
                 isCompleted = false,
                 description = "Description 1",
@@ -17,6 +18,7 @@ class TaskItemPreviewProvider : PreviewParameterProvider<Task> {
 
             Task(
                 id = "2",
+                noteId = "",
                 title = "Task 2",
                 isCompleted = true,
                 description = "Description 2",

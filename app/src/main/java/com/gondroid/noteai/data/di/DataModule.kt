@@ -37,7 +37,9 @@ class DataModule {
             NotesDatabase::class.java,
             "notes_database"
         )
-            .fallbackToDestructiveMigration() // Esto elimina y recrea la base de datos en cambios de esquema
+            // Esto elimina y recrea la base de datos en cambios de esquema
+            // solo para entorno de prueba
+            .fallbackToDestructiveMigration()
             .build()
     }
 

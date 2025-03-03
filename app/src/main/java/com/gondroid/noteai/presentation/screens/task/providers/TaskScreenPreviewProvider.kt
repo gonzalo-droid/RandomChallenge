@@ -23,6 +23,7 @@ val completedTask = mutableListOf<Task>()
             add(
                 Task(
                     id = it.toString(),
+                    noteId = "",
                     title = "Task $it",
                     description = "Description $it",
                     category = Category.WORK,
@@ -38,6 +39,7 @@ val pendingTask = mutableListOf<Task>()
             add(
                 Task(
                     id = (it + 30).toString(),
+                    noteId = "",
                     title = "Task $it",
                     description = "Description $it",
                     category = Category.OTHER,

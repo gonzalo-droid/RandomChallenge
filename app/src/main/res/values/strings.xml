@@ -13,9 +13,15 @@
     <string name="save">Save</string>
     <string name="task_name">Task name</string>
     <string name="task_description">Description</string>
-    <string name="task_created">Task created</string>
+    <string name="task_created">Tarea creada</string>
     <string name="note">Note</string>
     <string name="title">Título</string>
     <string name="write_your_ideas">Escribe tus ideas...</string>
     <string name="voice_recorder">Voice Recorder</string>
+    <string name="transcription_update">Transcripción actualizada</string>
+    <string name="note_save_success">Nota de voz guardada correctamente</string>
+    <string name="saving_voice_recorder">Guardando nota de voz</string>
+    <string name="delete_voice_recorder">Nota de voz eliminada</string>
+    <string name="note_created">Nota creada</string>
+
 </resources>
