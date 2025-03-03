@@ -37,12 +37,13 @@ fun NoteItemPreview() {
             modifier = Modifier,
             onItemSelected = {
             },
-            note = Note(
-                id = "1",
-                title = "Project Deadline",
-                content = "Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday.",
-                category = Category.WORK.toString()
-            )
+            note =
+                Note(
+                    id = "1",
+                    title = "Project Deadline",
+                    content = "Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday. Submit project report by Friday.",
+                    category = Category.WORK.toString(),
+                ),
         )
     }
 }
@@ -51,44 +52,46 @@ fun NoteItemPreview() {
 fun NoteItem(
     modifier: Modifier = Modifier,
     onItemSelected: (String) -> Unit,
-    note: Note
+    note: Note,
 ) {
+    val randomHeight =
+        remember {
+            Random.nextInt(100, 300)
+        }
 
-    val randomHeight = remember {
-        Random.nextInt(100, 300)
-    }
-
-    val maxLines = when {
-        randomHeight <= 120 -> 1
-        randomHeight <= 150 -> 2
-        randomHeight <= 200 -> 4
-        else -> 7
-    }
+    val maxLines =
+        when {
+            randomHeight <= 120 -> 1
+            randomHeight <= 150 -> 2
+            randomHeight <= 200 -> 4
+            else -> 7
+        }
 
     val randomColor = remember { randomColor() }
     val darkenedColor = remember { darkenColor(randomColor, 0.1f) } // Reduce brillo en 30%
 
-
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(randomHeight.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(randomColor)
-            .padding(16.dp)
-            .clickable {
-                onItemSelected(note.id)
-            },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(randomHeight.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(randomColor)
+                .padding(16.dp)
+                .clickable {
+                    onItemSelected(note.id)
+                },
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(randomHeight.dp)
-                .clickable {
-                    onItemSelected(note.id)
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(randomHeight.dp)
+                    .clickable {
+                        onItemSelected(note.id)
+                    },
         ) {
             Text(
                 text = note.title,
@@ -121,28 +124,29 @@ fun NoteItem(
                 fontSize = 9.sp,
                 color = darkenedColor,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomEnd),
             )
-
         }
     }
 }
 
-fun darkenColor(color: Color, factor: Float): Color {
-    return Color(
+fun darkenColor(
+    color: Color,
+    factor: Float,
+): Color =
+    Color(
         red = (color.red * factor).coerceIn(0f, 1f),
         green = (color.green * factor).coerceIn(0f, 1f),
         blue = (color.blue * factor).coerceIn(0f, 1f),
-        alpha = color.alpha
+        alpha = color.alpha,
     )
-}
 
-fun randomColor(): Color {
-    return Color(
+fun randomColor(): Color =
+    Color(
         red = Random.nextFloat(),
         green = Random.nextFloat(),
         blue = Random.nextFloat(),
-        alpha = 0.2f
+        alpha = 0.2f,
     )
-}

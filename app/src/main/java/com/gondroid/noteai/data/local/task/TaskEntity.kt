@@ -21,33 +21,33 @@ data class TaskEntity(
     val date: Long,
 ) {
     companion object {
-        fun fromTask(task: Task): TaskEntity {
-            return TaskEntity(
+        fun fromTask(task: Task): TaskEntity =
+            TaskEntity(
                 id = task.id,
                 noteId = task.noteId,
                 title = task.title,
                 description = task.description,
                 isCompleted = task.isCompleted,
-                date = task.date
-                    .atZone(
-                        ZoneId.systemDefault()
-                    ).toInstant()
-                    .toEpochMilli(),
+                date =
+                    task.date
+                        .atZone(
+                            ZoneId.systemDefault(),
+                        ).toInstant()
+                        .toEpochMilli(),
             )
-        }
     }
 
-    fun toTask(): Task {
-        return Task(
+    fun toTask(): Task =
+        Task(
             id = id,
             noteId = noteId,
             title = title,
             description = description,
             isCompleted = isCompleted,
-            date = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(date),
-                ZoneId.systemDefault()
-            )
+            date =
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(date),
+                    ZoneId.systemDefault(),
+                ),
         )
-    }
 }

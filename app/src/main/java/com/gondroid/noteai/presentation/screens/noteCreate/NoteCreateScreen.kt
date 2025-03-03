@@ -84,7 +84,6 @@ fun NoteCreateScreenRoot(
 
     val whisperTranscriber = remember { WhisperTranscriber() }
 
-
     // Solicita el permiso antes de grabar
     RequestAudioPermission { granted ->
         hasPermission = granted
@@ -101,28 +100,31 @@ fun NoteCreateScreenRoot(
         event.collect { event ->
             when (event) {
                 is NoteCreateEvent.NoteCreated -> {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.note_created),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.getString(R.string.note_created),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                     navigateBack()
                 }
 
                 is NoteCreateEvent.SaveVoiceRecorder -> {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.note_save_success),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.getString(R.string.note_save_success),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                 }
 
                 is NoteCreateEvent.TranscriptionUpdate -> {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.transcription_update),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.getString(R.string.transcription_update),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                 }
             }
         }
@@ -151,10 +153,9 @@ fun NoteCreateScreenRoot(
                     viewModel.onAction(action)
                 }
             }
-        }
+        },
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -162,9 +163,8 @@ fun NoteCreateScreen(
     whisperTranscriber: WhisperTranscriber,
     modifier: Modifier = Modifier,
     state: NoteCreateScreenState,
-    onAction: (ActionNoteCreate) -> Unit
+    onAction: (ActionNoteCreate) -> Unit,
 ) {
-
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -176,7 +176,7 @@ fun NoteCreateScreen(
                     Text(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold,
-                        text = stringResource(R.string.note)
+                        text = stringResource(R.string.note),
                     )
                 },
                 navigationIcon = {
@@ -184,62 +184,66 @@ fun NoteCreateScreen(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.clickable {
-                            onAction(
-                                ActionNoteCreate.Back
-                            )
-                        }
+                        modifier =
+                            Modifier.clickable {
+                                onAction(
+                                    ActionNoteCreate.Back,
+                                )
+                            },
                     )
                 },
             )
-        }
+        },
     ) { paddingValues ->
 
         Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
-
             LazyColumn(
-                modifier = Modifier
-                    .padding(bottom = 100.dp)
-                    .fillMaxSize(),
+                modifier =
+                    Modifier
+                        .padding(bottom = 100.dp)
+                        .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 item {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable {
-                                isExpanded = true
-                            }
+                            modifier =
+                                Modifier.clickable {
+                                    isExpanded = true
+                                },
                         ) {
-
                             Text(
-                                text = state.category?.toString()
-                                    ?: stringResource(R.string.category),
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    color = MaterialTheme.colorScheme.onSurface
-                                ),
-                                modifier = Modifier
-                                    .border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.outline,
-                                        shape = RoundedCornerShape(8.dp)
-                                    )
-                                    .padding(8.dp)
+                                text =
+                                    state.category?.toString()
+                                        ?: stringResource(R.string.category),
+                                style =
+                                    MaterialTheme.typography.labelSmall.copy(
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    ),
+                                modifier =
+                                    Modifier
+                                        .border(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colorScheme.outline,
+                                            shape = RoundedCornerShape(8.dp),
+                                        ).padding(8.dp),
                             )
 
                             Box(
                                 modifier = Modifier.padding(8.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.KeyboardArrowDown,
@@ -247,117 +251,128 @@ fun NoteCreateScreen(
                                     tint = MaterialTheme.colorScheme.onSurface,
                                 )
                                 DropdownMenu(
-                                    modifier = Modifier.background(
-                                        color = MaterialTheme.colorScheme.surfaceContainerHighest
-                                    ),
+                                    modifier =
+                                        Modifier.background(
+                                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                        ),
                                     expanded = isExpanded,
-                                    onDismissRequest = { isExpanded = false }
+                                    onDismissRequest = { isExpanded = false },
                                 ) {
                                     Column {
                                         Category.entries.forEach { category ->
                                             Text(
                                                 text = category.name,
-                                                style = MaterialTheme.typography.bodyMedium.copy(
-                                                    color = MaterialTheme.colorScheme.onSurface
-                                                ),
-                                                modifier = Modifier
-                                                    .padding(8.dp)
-                                                    .padding(
-                                                        8.dp
-                                                    )
-                                                    .clickable {
-                                                        isExpanded = false
-                                                        onAction(
-                                                            ActionNoteCreate.ChangeNoteCategory(
-                                                                category = category
+                                                style =
+                                                    MaterialTheme.typography.bodyMedium.copy(
+                                                        color = MaterialTheme.colorScheme.onSurface,
+                                                    ),
+                                                modifier =
+                                                    Modifier
+                                                        .padding(8.dp)
+                                                        .padding(
+                                                            8.dp,
+                                                        ).clickable {
+                                                            isExpanded = false
+                                                            onAction(
+                                                                ActionNoteCreate.ChangeNoteCategory(
+                                                                    category = category,
+                                                                ),
                                                             )
-                                                        )
-                                                    }
+                                                        },
                                             )
                                         }
                                     }
-
                                 }
                             }
                         }
                     }
 
-
                     BasicTextField(
                         state = state.title,
-                        textStyle = MaterialTheme.typography.headlineLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        ),
+                        textStyle =
+                            MaterialTheme.typography.headlineLarge.copy(
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = FontWeight.Bold,
+                            ),
                         cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
                         lineLimits = TextFieldLineLimits.SingleLine,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
                         decorator = { innerTextField ->
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
-                                if ((state.title.text.toString().isEmpty())) {
+                                if ((
+                                        state.title.text
+                                            .toString()
+                                            .isEmpty()
+                                    )
+                                ) {
                                     Text(
                                         modifier = Modifier.fillMaxWidth(),
                                         text = stringResource(R.string.title),
-                                        color = MaterialTheme.colorScheme.onSurface.copy(
-                                            alpha = 0.5f
-                                        ),
-                                        style = MaterialTheme.typography.headlineLarge.copy(
-                                            fontWeight = FontWeight.Bold
-                                        )
+                                        color =
+                                            MaterialTheme.colorScheme.onSurface.copy(
+                                                alpha = 0.5f,
+                                            ),
+                                        style =
+                                            MaterialTheme.typography.headlineLarge.copy(
+                                                fontWeight = FontWeight.Bold,
+                                            ),
                                     )
                                 } else {
                                     innerTextField()
                                 }
                             }
-                        }
+                        },
                     )
                     FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         ItemSheep(
                             modifier,
                             onAction = {
                                 onAction(
-                                    ActionNoteCreate.AddVoiceRecorder
+                                    ActionNoteCreate.AddVoiceRecorder,
                                 )
                             },
                             name = "Nota de voz",
-                            imageVector = Icons.Default.Mic
+                            imageVector = Icons.Default.Mic,
                         )
                         ItemSheep(
                             modifier,
                             onAction = {
                                 onAction(
-                                    ActionNoteCreate.MyTask
+                                    ActionNoteCreate.MyTask,
                                 )
                             },
                             name = "Mis tareas",
-                            imageVector = Icons.Default.Task
+                            imageVector = Icons.Default.Task,
                         )
                     }
 
-
                     FieldContent(
-                        state = state, modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
+                        state = state,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
                     )
 
                     HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier.padding(vertical = 8.dp),
                     )
                 }
 
                 items(
                     items = state.voiceRecordings,
-                    key = { record -> record.id }
+                    key = { record -> record.id },
                 ) { record ->
                     AudioPlayerItemRoot(
                         modifier = Modifier.fillMaxWidth(),
@@ -370,26 +385,28 @@ fun NoteCreateScreen(
                                 whisperTranscriber.transcribeAudio(record.path) { text ->
                                     onAction(
                                         ActionNoteCreate.SaveVoiceRecorder(
-                                            record.id, text ?: ""
-                                        )
+                                            record.id,
+                                            text ?: "",
+                                        ),
                                     )
                                 }
                             }
-                        }
+                        },
                     )
                 }
             }
 
             ButtonSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
                 state = state,
                 onAction = {
                     onAction(
-                        ActionNoteCreate.SaveNote
+                        ActionNoteCreate.SaveNote,
                     )
-                }
+                },
             )
         }
     }
@@ -399,34 +416,40 @@ fun NoteCreateScreen(
 fun ButtonSection(
     modifier: Modifier,
     state: NoteCreateScreenState,
-    onAction: () -> Unit
+    onAction: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .background(color = MaterialTheme.colorScheme.background)
-            .padding(top = 8.dp)
+        modifier =
+            modifier
+                .background(color = MaterialTheme.colorScheme.background)
+                .padding(top = 8.dp),
     ) {
         Button(
             enabled = state.canSaveNote,
             onClick = {
                 onAction()
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = stringResource(R.string.save),
                 style = MaterialTheme.typography.titleMedium,
-                color = if (state.canSaveNote)
-                    MaterialTheme.colorScheme.onPrimary
-                else
-                    MaterialTheme.colorScheme.onPrimaryContainer
+                color =
+                    if (state.canSaveNote) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    },
             )
         }
     }
 }
 
 @Composable
-fun FieldContent(state: NoteCreateScreenState, modifier: Modifier) {
+fun FieldContent(
+    state: NoteCreateScreenState,
+    modifier: Modifier,
+) {
     var isDescriptionFocus by remember {
         mutableStateOf(false)
     }
@@ -434,26 +457,34 @@ fun FieldContent(state: NoteCreateScreenState, modifier: Modifier) {
     BasicTextField(
         state = state.content,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
-        textStyle = MaterialTheme.typography.bodyLarge.copy(
-            color = MaterialTheme.colorScheme.onSurface
-        ),
-        lineLimits = if (isDescriptionFocus)
-            TextFieldLineLimits.MultiLine(
-                minHeightInLines = 1,
-                maxHeightInLines = 20
-            )
-        else
-            TextFieldLineLimits.Default,
-        modifier = modifier
-            .onFocusChanged {
-                isDescriptionFocus = it.isFocused
+        textStyle =
+            MaterialTheme.typography.bodyLarge.copy(
+                color = MaterialTheme.colorScheme.onSurface,
+            ),
+        lineLimits =
+            if (isDescriptionFocus) {
+                TextFieldLineLimits.MultiLine(
+                    minHeightInLines = 1,
+                    maxHeightInLines = 20,
+                )
+            } else {
+                TextFieldLineLimits.Default
             },
+        modifier =
+            modifier
+                .onFocusChanged {
+                    isDescriptionFocus = it.isFocused
+                },
         decorator = { innerTextField ->
             Column {
-                if (state.content.text.toString().isEmpty() && !isDescriptionFocus) {
+                if (state.content.text
+                        .toString()
+                        .isEmpty() &&
+                    !isDescriptionFocus
+                ) {
                     Text(
                         text = stringResource(R.string.write_your_ideas),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     )
                 }
                 innerTextField() // Renderiza el campo de texto dentro del Box
@@ -464,57 +495,59 @@ fun FieldContent(state: NoteCreateScreenState, modifier: Modifier) {
 
 @Composable
 fun FieldTitle(state: NoteCreateScreenState) {
-
 }
-
 
 @Composable
 fun ItemSheep(
     modifier: Modifier,
-    onAction: (ActionNoteCreate) -> Unit, name: String, imageVector: ImageVector
+    onAction: (ActionNoteCreate) -> Unit,
+    name: String,
+    imageVector: ImageVector,
 ) {
     Row(
-        modifier = Modifier
-            .wrapContentSize()
-            .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
-            .background(Color.White)
-            .clickable {
-                onAction(ActionNoteCreate.AddVoiceRecorder)
-            }
-            .padding(4.dp),
+        modifier =
+            Modifier
+                .wrapContentSize()
+                .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.White)
+                .clickable {
+                    onAction(ActionNoteCreate.AddVoiceRecorder)
+                }.padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
     ) {
         Icon(
             imageVector = imageVector,
             contentDescription = "Nota de voz",
             tint = Color.Unspecified,
-            modifier = Modifier
-                .size(24.dp)
-                .padding(4.dp)
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .padding(4.dp),
         )
 
         Text(
             text = name,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = Color.Black,
         )
     }
 }
 
 @Composable
 fun RequestAudioPermission(onPermissionGranted: (Boolean) -> Unit) {
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { granted ->
-            if (granted) {
-                onPermissionGranted(true)
-            } else {
-                Log.d("AudioRecorder", "Permiso de audio denegado")
-            }
-        }
-    )
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { granted ->
+                if (granted) {
+                    onPermissionGranted(true)
+                } else {
+                    Log.d("AudioRecorder", "Permiso de audio denegado")
+                }
+            },
+        )
 
     LaunchedEffect(Unit) {
         permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
@@ -524,29 +557,29 @@ fun RequestAudioPermission(onPermissionGranted: (Boolean) -> Unit) {
 @Composable
 @Preview
 fun NoteScreenLightPreview(
-    @PreviewParameter(NoteCreateScreenStatePreviewProvider::class) state: NoteCreateScreenState
+    @PreviewParameter(NoteCreateScreenStatePreviewProvider::class) state: NoteCreateScreenState,
 ) {
     NoteAppTheme {
         NoteCreateScreen(
             state = state,
             onAction = {},
-            whisperTranscriber = WhisperTranscriber()
+            whisperTranscriber = WhisperTranscriber(),
         )
     }
 }
 
 @Composable
 @Preview(
-    uiMode = UI_MODE_NIGHT_YES
+    uiMode = UI_MODE_NIGHT_YES,
 )
 fun NoteScreenDarkPreview(
-    @PreviewParameter(NoteCreateScreenStatePreviewProvider::class) state: NoteCreateScreenState
+    @PreviewParameter(NoteCreateScreenStatePreviewProvider::class) state: NoteCreateScreenState,
 ) {
     NoteAppTheme {
         NoteCreateScreen(
             state = state,
             onAction = {},
-            whisperTranscriber = WhisperTranscriber()
+            whisperTranscriber = WhisperTranscriber(),
         )
     }
 }

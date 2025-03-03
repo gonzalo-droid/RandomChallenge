@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface VoiceRecorderDao {
-
     @Query("SELECT * FROM voice_recorder")
     fun getAllVoiceRecordings(): Flow<List<VoiceRecorderEntity>>
 

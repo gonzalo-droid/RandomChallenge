@@ -7,12 +7,12 @@ import java.time.format.DateTimeFormatter
 
 class DateUtil {
     companion object {
-
         fun formatDateTime(date: Long): String {
-            val localDateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(date),
-                ZoneId.systemDefault()
-            )
+            val localDateTime =
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(date),
+                    ZoneId.systemDefault(),
+                )
 
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yy hh:mm a")
             return localDateTime.format(formatter)

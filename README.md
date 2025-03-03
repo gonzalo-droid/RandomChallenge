@@ -64,7 +64,7 @@ Para Android, abre el proyecto en Android Studio y ejecuta la aplicación desde 
 - **Patrón Repository:** Actúa como mediador entre diferentes fuentes de datos y la lógica de negocio de la aplicación.  
 - **[Kotlin Serialization](https://github.com/Kotlin/kotlinx.serialization):** Serialización sin reflejos para múltiples plataformas y formatos en Kotlin.  
 - **[ksp](https://github.com/google/ksp):** API de procesamiento de símbolos en Kotlin para generación y análisis de código.  
-
+- **[ktlint](https://github.com/pinterest/ktlint):** Linter para kotlin. https://medium.com/@amitdogra70512/ktlint-integration-in-android-952049b9d17d
 ## Architecture
 **Note.AI** sigue la aquitectura MVVM e implementa patrón Repository, alineado con [Guía oficl de arquitectura de Google](https://developer.android.com/topic/architecture).
 

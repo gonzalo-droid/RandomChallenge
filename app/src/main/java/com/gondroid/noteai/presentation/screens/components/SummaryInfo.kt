@@ -31,43 +31,44 @@ fun SummaryInfo(
     date: String = "March 9, 2024",
     tasksSummary: String = "5 incomplete, 5 completed",
     completedTasks: Int = 5,
-    totalTask: Int = 10
-
+    totalTask: Int = 10,
 ) {
-
-    val angleRatio = remember {
-        Animatable(0f)
-    }
+    val angleRatio =
+        remember {
+            Animatable(0f)
+        }
 
     LaunchedEffect(completedTasks, totalTask) {
         if (totalTask == 0) {
             angleRatio.animateTo(
-                targetValue = 0f
+                targetValue = 0f,
             )
             return@LaunchedEffect
         }
         angleRatio.animateTo(
             targetValue = (completedTasks.toFloat() / totalTask.toFloat()),
-            animationSpec = tween( // animation type
-                durationMillis = 300
-            )
+            animationSpec =
+                tween( // animation type
+                    durationMillis = 300,
+                ),
         )
     }
 
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier
-                .weight(1.5f)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .weight(1.5f)
+                    .padding(16.dp),
         ) {
             Text(
                 text = date,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Text(
@@ -78,17 +79,18 @@ fun SummaryInfo(
         }
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .padding(16.dp)
-                .aspectRatio(1f)
-                .weight(1f)
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .aspectRatio(1f)
+                    .weight(1f),
         ) {
             val colorBase = MaterialTheme.colorScheme.inversePrimary
             val progress = MaterialTheme.colorScheme.primary
             val strokeWidth = 16.dp
 
             Canvas(
-                modifier = Modifier.aspectRatio(1f)
+                modifier = Modifier.aspectRatio(1f),
             ) {
                 drawArc(
                     color = colorBase,
@@ -96,10 +98,11 @@ fun SummaryInfo(
                     sweepAngle = 360f,
                     useCenter = false,
                     size = size,
-                    style = Stroke(
-                        width = strokeWidth.toPx(),
-                        cap = StrokeCap.Round
-                    )
+                    style =
+                        Stroke(
+                            width = strokeWidth.toPx(),
+                            cap = StrokeCap.Round,
+                        ),
                 )
 
                 if (completedTasks <= totalTask) {
@@ -109,10 +112,11 @@ fun SummaryInfo(
                         sweepAngle = 360f * angleRatio.value,
                         useCenter = false,
                         size = size,
-                        style = Stroke(
-                            width = strokeWidth.toPx(),
-                            cap = StrokeCap.Round
-                        )
+                        style =
+                            Stroke(
+                                width = strokeWidth.toPx(),
+                                cap = StrokeCap.Round,
+                            ),
                     )
                 }
             }
@@ -121,7 +125,7 @@ fun SummaryInfo(
                 text = "${(completedTasks / totalTask.toFloat()).times(100).toInt()}%",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }

@@ -21,17 +21,13 @@ import com.gondroid.noteai.presentation.screens.taskCreate.TaskCreateViewModel
 import com.gondroid.noteai.presentation.screens.voiceRecorder.VoiceRecorderScreenRoot
 
 @Composable
-fun NavigationRoot(
-    navController: NavHostController
-) {
-
+fun NavigationRoot(navController: NavHostController) {
     Box(
-        modifier = Modifier.fillMaxSize()
-    )
-    {
+        modifier = Modifier.fillMaxSize(),
+    ) {
         NavHost(
             navController = navController,
-            startDestination = NoteScreenRoute
+            startDestination = NoteScreenRoute,
         ) {
             composable<NoteScreenRoute> {
                 val viewmodel = hiltViewModel<NoteScreenViewModel>()
@@ -40,10 +36,10 @@ fun NavigationRoot(
                     navigateTo = { noteId ->
                         navController.navigate(
                             NoteCreateScreenRoute(
-                                noteId = noteId
-                            )
+                                noteId = noteId,
+                            ),
                         )
-                    }
+                    },
                 )
             }
 
@@ -54,7 +50,9 @@ fun NavigationRoot(
                 val navBackStackEntry = remember { navController.currentBackStackEntry }
 
                 LaunchedEffect(navBackStackEntry) {
-                    navBackStackEntry?.savedStateHandle?.get<String>("recordedFilePath")
+                    navBackStackEntry
+                        ?.savedStateHandle
+                        ?.get<String>("recordedFilePath")
                         ?.let { filePath ->
                             viewmodel.updateRecordedFilePath(filePath)
                         }
@@ -70,10 +68,9 @@ fun NavigationRoot(
                     },
                     navigateToMyTask = { nodeId ->
                         navController.navigate(TaskScreenRoute(noteId = nodeId))
-                    }
+                    },
                 )
             }
-
 
             composable<TaskScreenRoute> {
                 val viewmodel = hiltViewModel<TaskScreenViewModel>()
@@ -86,10 +83,10 @@ fun NavigationRoot(
                         navController.navigate(
                             TaskCreateScreenRoute(
                                 taskId = taskId,
-                                noteId = noteId
-                            )
+                                noteId = noteId,
+                            ),
                         )
-                    }
+                    },
                 )
             }
 
@@ -99,10 +96,9 @@ fun NavigationRoot(
                     viewModel = viewmodel,
                     navigateBack = {
                         navController.navigateUp()
-                    }
+                    },
                 )
             }
-
 
             composable<VoiceRecorderRoute> {
                 VoiceRecorderScreenRoot(
@@ -114,7 +110,7 @@ fun NavigationRoot(
                             ?.savedStateHandle
                             ?.set("recordedFilePath", filePath)
                         navController.popBackStack()
-                    }
+                    },
                 )
             }
         }

@@ -24,76 +24,56 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class DataModule {
-
-
     @Provides
     @Singleton
     fun provideDataBase(
         @ApplicationContext
-        context: Context
-    ): NotesDatabase {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            NotesDatabase::class.java,
-            "notes_database"
-        )
+        context: Context,
+    ): NotesDatabase =
+        Room
+            .databaseBuilder(
+                context.applicationContext,
+                NotesDatabase::class.java,
+                "notes_database",
+            )
             // Esto elimina y recrea la base de datos en cambios de esquema
             // solo para entorno de prueba
             .fallbackToDestructiveMigration()
             .build()
-    }
 
     @Provides
     @Singleton
-    fun provideTaskDao(
-        database: NotesDatabase
-    ): TaskDao {
-        return database.taskDao()
-    }
+    fun provideTaskDao(database: NotesDatabase): TaskDao = database.taskDao()
 
     @Provides
     @Singleton
-    fun provideNoteDao(
-        database: NotesDatabase
-    ): NoteDao {
-        return database.noteDao()
-    }
+    fun provideNoteDao(database: NotesDatabase): NoteDao = database.noteDao()
 
     @Provides
     @Singleton
-    fun provideVoiceRecorderDao(
-        database: NotesDatabase
-    ): VoiceRecorderDao {
-        return database.voiceRecorderDao()
-    }
+    fun provideVoiceRecorderDao(database: NotesDatabase): VoiceRecorderDao = database.voiceRecorderDao()
 
     @Provides
     @Singleton
     fun provideTaskLocalDataSource(
         taskDao: TaskDao,
         @Named("dispatcherIO")
-        dispatcherIO: CoroutineDispatcher
-    ): TaskLocalDataSource {
-        return RoomTaskLocalDataSource(taskDao, dispatcherIO)
-    }
+        dispatcherIO: CoroutineDispatcher,
+    ): TaskLocalDataSource = RoomTaskLocalDataSource(taskDao, dispatcherIO)
 
     @Provides
     @Singleton
     fun provideNoteLocalDataSource(
         noteDao: NoteDao,
         @Named("dispatcherIO")
-        dispatcherIO: CoroutineDispatcher
-    ): NoteLocalDataSource {
-        return RoomNoteLocalDataSource(noteDao, dispatcherIO)
-    }
+        dispatcherIO: CoroutineDispatcher,
+    ): NoteLocalDataSource = RoomNoteLocalDataSource(noteDao, dispatcherIO)
 
     @Provides
     @Singleton
     fun provideVoiceRecorderLocalDataSource(
         voiceRecorderDao: VoiceRecorderDao,
         @Named("dispatcherIO")
-        dispatcherIO: CoroutineDispatcher
-    ): VoiceRecorderLocalDataSource {
-        return RoomVoiceRecorderLocalDataSource(voiceRecorderDao, dispatcherIO)
-    }
+        dispatcherIO: CoroutineDispatcher,
+    ): VoiceRecorderLocalDataSource = RoomVoiceRecorderLocalDataSource(voiceRecorderDao, dispatcherIO)
 }

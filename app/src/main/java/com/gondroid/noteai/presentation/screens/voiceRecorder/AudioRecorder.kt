@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.os.Build
 import android.os.Environment
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
@@ -23,11 +22,12 @@ class AudioRecorder {
     private var outputFile: String = ""
 
     private val sampleRate = 44100
-    private val bufferSize = AudioRecord.getMinBufferSize(
-        sampleRate,
-        AudioFormat.CHANNEL_IN_MONO,
-        AudioFormat.ENCODING_PCM_16BIT
-    )
+    private val bufferSize =
+        AudioRecord.getMinBufferSize(
+            sampleRate,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+        )
 
     private var audioRecord: AudioRecord? = null
 
@@ -37,7 +37,6 @@ class AudioRecorder {
     private var recordingJob: Job? = null
     private var isPaused = false
 
-
     fun startRecording(): String? {
         try {
             if (mediaRecorder != null) return null // Already recording
@@ -46,15 +45,16 @@ class AudioRecorder {
             if (!directory.exists()) directory.mkdirs()
             outputFile = "${directory.absolutePath}/voice_note_${System.currentTimeMillis()}.mp3"
 
-            mediaRecorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                setOutputFile(outputFile)
+            mediaRecorder =
+                MediaRecorder().apply {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                    setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                    setOutputFile(outputFile)
 
-                prepare()
-                start()
-            }
+                    prepare()
+                    start()
+                }
             startAmplitudeTracking()
             isPaused = false
             return outputFile
@@ -131,39 +131,41 @@ class AudioRecorder {
         }
     }
 
-
     fun getAmplitudeFlow(): StateFlow<List<Float>> = amplitudes
 
     @SuppressLint("MissingPermission")
     private fun startAmplitudeTracking() {
-        audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.MIC,
-            sampleRate,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT,
-            bufferSize
-        )
+        audioRecord =
+            AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                sampleRate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                bufferSize,
+            )
 
         audioRecord?.startRecording()
 
-        recordingJob = CoroutineScope(Dispatchers.IO).launch {
-            val buffer = ShortArray(bufferSize)
-            while (audioRecord?.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
-                if (!isPaused) {
-                    val readSize = audioRecord?.read(buffer, 0, buffer.size) ?: 0
-                    if (readSize > 0) {
-                        val amplitude = buffer.take(readSize)
-                            .map { it.toFloat().absoluteValue / Short.MAX_VALUE }
-                            .average()
-                            .toFloat()
+        recordingJob =
+            CoroutineScope(Dispatchers.IO).launch {
+                val buffer = ShortArray(bufferSize)
+                while (audioRecord?.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+                    if (!isPaused) {
+                        val readSize = audioRecord?.read(buffer, 0, buffer.size) ?: 0
+                        if (readSize > 0) {
+                            val amplitude =
+                                buffer
+                                    .take(readSize)
+                                    .map { it.toFloat().absoluteValue / Short.MAX_VALUE }
+                                    .average()
+                                    .toFloat()
 
-                        withContext(Dispatchers.Main) {
-                            _amplitudes.value = (_amplitudes.value + amplitude).takeLast(50)
+                            withContext(Dispatchers.Main) {
+                                _amplitudes.value = (_amplitudes.value + amplitude).takeLast(50)
+                            }
                         }
                     }
                 }
             }
-        }
     }
-
 }

@@ -17,31 +17,31 @@ data class NoteEntity(
     val date: Long,
 ) {
     companion object {
-        fun fromNote(note: Note): NoteEntity {
-            return NoteEntity(
+        fun fromNote(note: Note): NoteEntity =
+            NoteEntity(
                 id = note.id,
                 title = note.title,
                 content = note.content,
                 category = note.category,
-                date = note.date
-                    .atZone(
-                        ZoneId.systemDefault()
-                    ).toInstant()
-                    .toEpochMilli(),
+                date =
+                    note.date
+                        .atZone(
+                            ZoneId.systemDefault(),
+                        ).toInstant()
+                        .toEpochMilli(),
             )
-        }
     }
 
-    fun toNote(): Note {
-        return Note(
+    fun toNote(): Note =
+        Note(
             id = id,
             title = title,
             content = content,
             category = category,
-            date = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(date),
-                ZoneId.systemDefault()
-            )
+            date =
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(date),
+                    ZoneId.systemDefault(),
+                ),
         )
-    }
 }

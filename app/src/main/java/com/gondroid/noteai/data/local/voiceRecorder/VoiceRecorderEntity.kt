@@ -20,33 +20,33 @@ data class VoiceRecorderEntity(
     val date: Long,
 ) {
     companion object {
-        fun fromVoiceRecorder(voiceRecorder: VoiceRecorder): VoiceRecorderEntity {
-            return VoiceRecorderEntity(
+        fun fromVoiceRecorder(voiceRecorder: VoiceRecorder): VoiceRecorderEntity =
+            VoiceRecorderEntity(
                 id = voiceRecorder.id,
                 noteId = voiceRecorder.noteId,
                 name = voiceRecorder.name,
                 path = voiceRecorder.path,
                 transcription = voiceRecorder.transcription,
-                date = voiceRecorder.date
-                    .atZone(
-                        ZoneId.systemDefault()
-                    ).toInstant()
-                    .toEpochMilli(),
+                date =
+                    voiceRecorder.date
+                        .atZone(
+                            ZoneId.systemDefault(),
+                        ).toInstant()
+                        .toEpochMilli(),
             )
-        }
     }
 
-    fun toVoiceRecorder(): VoiceRecorder {
-        return VoiceRecorder(
+    fun toVoiceRecorder(): VoiceRecorder =
+        VoiceRecorder(
             id = id,
             noteId = noteId,
             name = name,
             path = path,
             transcription = transcription,
-            date = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(date),
-                ZoneId.systemDefault()
-            )
+            date =
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(date),
+                    ZoneId.systemDefault(),
+                ),
         )
-    }
 }

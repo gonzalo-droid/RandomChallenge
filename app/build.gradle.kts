@@ -8,12 +8,12 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktlint)
 }
 
 room {
     schemaDirectory("$projectDir/schemas")
 }
-
 
 // Local Properties
 val localProperties = Properties()
@@ -42,14 +42,14 @@ android {
         }
 
         buildConfigField("String", "API_KEY_OPENAI", "\"${apiKeyOpenAI}\"")
-
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
             )
         }
     }
@@ -58,14 +58,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-
     kotlinOptions {
 
         jvmTarget = "17"
     }
 
     buildFeatures {
-        buildConfig = true // Habilitar BuildConfig
+        buildConfig = true
         compose = true
     }
 
@@ -77,7 +76,7 @@ android {
 }
 
 dependencies {
-    //Librerias Android y compose
+    // Librerias Android y compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -98,28 +97,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //Librerias Room
+    // Librerias Room
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
 
-    //Librerias Dagger Hilt
+    // Librerias Dagger Hilt
     implementation(libs.dagger.hilt.navigation.compose)
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.compiler)
 
-    //Libreria Serializacion
+    // Libreria Serializacion
     implementation(libs.kotlinx.serialization.json)
 
-    //Moshi
+    // Moshi
     implementation(libs.moshi)
     ksp(libs.moshi.codegen)
     implementation(libs.moshi.kotlin)
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
-    //OkHttp
+    // OkHttp
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
-
 }

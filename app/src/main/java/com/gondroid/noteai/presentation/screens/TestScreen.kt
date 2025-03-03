@@ -54,7 +54,6 @@ import com.gondroid.noteai.ui.theme.NoteAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun TestScreenRoot() {
     val context = LocalContext.current
@@ -69,7 +68,6 @@ fun TestScreenRoot() {
     var duration by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
     var whisperText by remember { mutableStateOf<String?>(null) }
-
 
     // Solicita el permiso antes de grabar
     RequestAudioPermission { granted ->
@@ -89,7 +87,6 @@ fun TestScreenRoot() {
 
             whisperTranscriber.transcribeAudio(recordedFilePath!!) { text ->
                 whisperText = text ?: "Error en la transcripción"
-
             }
         },
         onStopRecorder = {
@@ -137,22 +134,23 @@ fun TestScreenRoot() {
                 mediaPlayer.start()
                 isPaused = false
             }
-        }
+        },
     )
 }
 
 @Composable
 fun RequestAudioPermission(onPermissionGranted: (Boolean) -> Unit) {
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { granted ->
-            if (granted) {
-                onPermissionGranted(true)
-            } else {
-                Log.d("AudioRecorder", "Permiso de audio denegado")
-            }
-        }
-    )
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { granted ->
+                if (granted) {
+                    onPermissionGranted(true)
+                } else {
+                    Log.d("AudioRecorder", "Permiso de audio denegado")
+                }
+            },
+        )
 
     LaunchedEffect(Unit) {
         permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
@@ -172,7 +170,7 @@ fun TestScreen(
     onFinishMediaPlayer: () -> Unit,
     progress: Float,
     duration: Int,
-    whisperText: String?
+    whisperText: String?,
 ) {
     var isRecording by remember { mutableStateOf(false) }
 
@@ -182,7 +180,7 @@ fun TestScreen(
                 title = {
                     Text(
                         style = MaterialTheme.typography.headlineSmall,
-                        text = "Recorder"
+                        text = "Recorder",
                     )
                 },
                 navigationIcon = {
@@ -190,21 +188,22 @@ fun TestScreen(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.clickable {
-
-                        }
+                        modifier =
+                            Modifier.clickable {
+                            },
                     )
                 },
             )
-        }
+        },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             // Botón de grabación
             VoiceNoteRecorder(
@@ -221,7 +220,7 @@ fun TestScreen(
                     } else {
                         Log.d("AudioRecorder", "Permiso de micrófono requerido")
                     }
-                }
+                },
             )
 
             // Mostrar archivo guardado
@@ -235,7 +234,7 @@ fun TestScreen(
                     value = progress,
                     onValueChange = { },
                     valueRange = 0f..1f,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Text(text = "Duración: ${duration / 1000} segundos")
@@ -269,7 +268,7 @@ fun TestScreen(
                     Text(
                         text = it,
                         modifier = Modifier.padding(16.dp),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -277,24 +276,23 @@ fun TestScreen(
     }
 }
 
-
 @Composable
 fun VoiceNoteRecorder(
     modifier: Modifier,
     isRecording: Boolean,
-    onRecordToggle: () -> Unit
+    onRecordToggle: () -> Unit,
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         // Estado de la grabación
         Text(
             text = if (isRecording) "Grabando..." else "Presiona para grabar",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = if (isRecording) Color.Red else Color.Gray
+            color = if (isRecording) Color.Red else Color.Gray,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -302,18 +300,19 @@ fun VoiceNoteRecorder(
         // Botón de grabación con icono dinámico
         IconButton(
             onClick = onRecordToggle,
-            modifier = Modifier
-                .size(80.dp)
-                .background(
-                    color = if (isRecording) Color.Red else Color.Gray,
-                    shape = CircleShape
-                ),
+            modifier =
+                Modifier
+                    .size(80.dp)
+                    .background(
+                        color = if (isRecording) Color.Red else Color.Gray,
+                        shape = CircleShape,
+                    ),
         ) {
             Icon(
                 imageVector = if (isRecording) Icons.Default.Close else Icons.Default.Favorite,
                 contentDescription = "Record Button",
                 tint = Color.White,
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier.size(50.dp),
             )
         }
     }
@@ -321,7 +320,7 @@ fun VoiceNoteRecorder(
 
 @Preview(
     showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
 fun TestScreenPreview() {
@@ -337,7 +336,7 @@ fun TestScreenPreview() {
             onFinishMediaPlayer = {},
             progress = 1f,
             duration = 10,
-            whisperText = "whisperText"
+            whisperText = "whisperText",
         )
     }
 }

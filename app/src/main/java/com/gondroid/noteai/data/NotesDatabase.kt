@@ -15,11 +15,12 @@ import com.gondroid.noteai.data.local.voiceRecorder.VoiceRecorderEntity
         NoteEntity::class,
         VoiceRecorderEntity::class,
     ],
-    version = 1
+    version = 1,
 )
-
-abstract class NotesDatabase:RoomDatabase() {
+abstract class NotesDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
+
     abstract fun noteDao(): NoteDao
+
     abstract fun voiceRecorderDao(): VoiceRecorderDao
 }

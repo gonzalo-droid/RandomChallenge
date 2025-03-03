@@ -34,27 +34,25 @@ fun TaskItemPreview() {
             onItemSelected = { action, id ->
                 when (action) {
                     ActionOnSelected.DONE -> {
-
                     }
 
                     ActionOnSelected.DELETE -> {
-
                     }
 
                     else -> {
-
                     }
                 }
             },
             onToggleCompletion = {},
-            task = Task(
-                id = "",
-                noteId = "",
-                title = "Task 1",
-                description = "Description 1",
-                isCompleted = false,
-                category = Category.SHOPPING
-            )
+            task =
+                Task(
+                    id = "",
+                    noteId = "",
+                    title = "Task 1",
+                    description = "Description 1",
+                    isCompleted = false,
+                    category = Category.SHOPPING,
+                ),
         )
     }
 }
@@ -64,30 +62,31 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     onItemSelected: (ActionOnSelected, String) -> Unit,
     onToggleCompletion: (Task) -> Unit,
-    task: Task
+    task: Task,
 ) {
-    Row(modifier = modifier
-        .clickable {
-            onItemSelected(ActionOnSelected.DONE, task.id)
-        }
-        .background(MaterialTheme.colorScheme.surfaceContainer)
-        .padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Row(
+        modifier =
+            modifier
+                .clickable {
+                    onItemSelected(ActionOnSelected.DONE, task.id)
+                }.background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Checkbox(
             checked = task.isCompleted,
             onCheckedChange = {
                 onToggleCompletion(task)
-            }
+            },
         )
 
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .padding(8.dp)
-                .weight(1f)
+            modifier =
+                Modifier
+                    .padding(8.dp)
+                    .weight(1f),
         ) {
             Text(
                 text = task.title,
@@ -120,22 +119,20 @@ fun TaskItem(
                     )
                 }
             }
-
         }
-
 
         Box {
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clickable {
-                        onItemSelected(ActionOnSelected.DELETE, task.id)
-                    }
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            onItemSelected(ActionOnSelected.DELETE, task.id)
+                        },
             )
         }
     }
-
 }

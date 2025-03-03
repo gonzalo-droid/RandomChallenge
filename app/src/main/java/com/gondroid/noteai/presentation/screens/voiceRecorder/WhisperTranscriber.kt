@@ -10,39 +10,55 @@ import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 
-class WhisperTranscriber() {
+class WhisperTranscriber {
     private val apiKey = BuildConfig.API_KEY_OPENAI
     private val client = OkHttpClient()
 
-    fun transcribeAudio(filePath: String, callback: (String?) -> Unit) {
+    fun transcribeAudio(
+        filePath: String,
+        callback: (String?) -> Unit,
+    ) {
         val file = File(filePath)
-        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("file", file.name, file.asRequestBody("audio/mpeg".toMediaTypeOrNull()))
-            .addFormDataPart("model", "whisper-1")
-            .build()
+        val requestBody =
+            MultipartBody
+                .Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.name, file.asRequestBody("audio/mpeg".toMediaTypeOrNull()))
+                .addFormDataPart("model", "whisper-1")
+                .build()
 
-        val request = Request.Builder()
-            .url("https://api.openai.com/v1/audio/transcriptions")
-            .addHeader("Authorization", "Bearer $apiKey")
-            .post(requestBody)
-            .build()
+        val request =
+            Request
+                .Builder()
+                .url("https://api.openai.com/v1/audio/transcriptions")
+                .addHeader("Authorization", "Bearer $apiKey")
+                .post(requestBody)
+                .build()
         Log.d("WhisperTranscriber", request.toString())
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("WhisperTranscriber", "Error: ${e.message}")
-                callback(null)
-            }
+        client.newCall(request).enqueue(
+            object : Callback {
+                override fun onFailure(
+                    call: Call,
+                    e: IOException,
+                ) {
+                    Log.e("WhisperTranscriber", "Error: ${e.message}")
+                    callback(null)
+                }
 
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let { responseBody ->
-                    val jsonObject = JSONObject(responseBody)
-                    Log.e("WhisperTranscriber", jsonObject.toString())
+                override fun onResponse(
+                    call: Call,
+                    response: Response,
+                ) {
+                    response.body?.string()?.let { responseBody ->
+                        val jsonObject = JSONObject(responseBody)
+                        Log.e("WhisperTranscriber", jsonObject.toString())
 
-                    val text = jsonObject.optString("text", "Error en la transcripción")
-                    callback(text)
-                } ?: callback(null)
-            }
-        })
+                        val text = jsonObject.optString("text", "Error en la transcripción")
+                        callback(text)
+                    } ?: callback(null)
+                }
+            },
+        )
     }
 }

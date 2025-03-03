@@ -11,12 +11,11 @@ import javax.inject.Named
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-
     @Provides
     @Named("dispatcherIO")
     fun provideDispatcherIO(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
     @Named("dispatcherMain")
-    fun provideDispatcherMain():CoroutineDispatcher = Dispatchers.Main
+    fun provideDispatcherMain(): CoroutineDispatcher = Dispatchers.Main
 }

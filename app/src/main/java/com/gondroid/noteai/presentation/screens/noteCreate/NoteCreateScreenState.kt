@@ -2,7 +2,6 @@ package com.gondroid.noteai.presentation.screens.noteCreate
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.gondroid.noteai.domain.VoiceRecorder
-import java.util.UUID
 
 data class NoteCreateScreenState(
     val noteId: String? = null,
@@ -10,5 +9,5 @@ data class NoteCreateScreenState(
     val content: TextFieldState = TextFieldState(),
     val category: String? = null,
     val canSaveNote: Boolean = false,
-    val voiceRecordings: List<VoiceRecorder> = emptyList()
+    val voiceRecordings: List<VoiceRecorder> = emptyList(),
 )
