@@ -39,7 +39,7 @@ git clone https://github.com/gonzalo-droid/NoteAI.git
 ##### 3️⃣ Agregar la Clave de API en local.properties
 - En la raíz del proyecto, crea (o actualiza) un archivo llamado local.properties y agrega la siguiente línea:
 ```bash
-API_KEY=TU_CLAVE_DE_API_AQUÍ
+API_KEY_OPENAI=TU_CLAVE_DE_API_AQUÍ
 ```
 ##### 4️⃣ Compilar y Ejecutar el Proyecto
 - Usa Gradle para compilar y ejecutar el proyecto:
